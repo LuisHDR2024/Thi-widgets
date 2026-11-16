@@ -1,0 +1,339 @@
+{
+  "fqn": "my_widgets.fuelgauge",
+  "name": "my_widgets fuelgauge",
+  "deprecated": false,
+  "image": null,
+  "description": "Gauge semicircular centrado con abertura inferior y aguja con pivote central (estilos configurables); valor con unidad en la misma línea y tamaño ajustable dentro de la abertura. Widget tipo Last value, segmentos contiguos y datasource nativo de ThingsBoard. Temas Industrial / Executive. Estado textual y su color configurables por segmento del arco. Iconos compatibles con Material, mdi: y svg:.",
+  "descriptor": {
+    "type": "latest",
+    "sizeX": 4,
+    "sizeY": 3,
+    "resources": [],
+    "templateHtml": "<div class=\"fg-root\" *ngIf=\"vm\" [style.border-radius]=\"vm.borderRadius\" [class.fg-light]=\"vm.theme==='executive'\" [class.fg-industrial]=\"vm.theme==='industrial'\">\n  <div class=\"fg-header\" *ngIf=\"vm.showLabel\">\n    <div class=\"fg-heading\">\n      <span class=\"fg-label\">{{vm.label}}</span>\n    </div>\n    <span class=\"fg-status\" *ngIf=\"vm.showStatus && vm.status\" [style.color]=\"vm.statusColor\" [style.background]=\"vm.statusBg\">{{vm.status}}</span>\n  </div>\n  <div class=\"fg-gauge-wrap\">\n    <div class=\"fg-stage\" [style.width.px]=\"vm.stageW\" [style.height.px]=\"vm.stageH\">\n      <svg class=\"fg-svg\" viewBox=\"0 0 320 240\" role=\"img\" [attr.aria-label]=\"vm.label + ': ' + vm.displayValue + ' ' + vm.unit\">\n        <path class=\"fg-track\" [attr.d]=\"vm.trackPath\"></path>\n        <path *ngFor=\"let seg of vm.segments\" class=\"fg-segment\" [attr.d]=\"seg.path\" [attr.stroke]=\"seg.color\"></path>\n        <g class=\"fg-ticks\" *ngIf=\"vm.showScale\">\n          <text *ngFor=\"let tick of vm.ticks\" [attr.x]=\"tick.x\" [attr.y]=\"tick.y\" text-anchor=\"middle\">{{tick.label}}</text>\n        </g>\n        <g class=\"fg-needle\" *ngIf=\"vm.needleStyle!=='none'\" [style.transform]=\"vm.needleTransform\" [style.color]=\"vm.needleColor\">\n          <path *ngIf=\"vm.markerPath\" class=\"fg-needle-marker\" [attr.d]=\"vm.markerPath\"></path>\n          <path *ngIf=\"vm.needleFilled\" class=\"fg-needle-body\" [attr.d]=\"vm.needlePath\"></path>\n          <path *ngIf=\"!vm.needleFilled\" class=\"fg-needle-line\" [attr.d]=\"vm.needlePath\"></path>\n          <circle class=\"fg-hub\" cx=\"160\" cy=\"115\" [attr.r]=\"vm.hubRadius\"></circle>\n          <circle class=\"fg-hub-dot\" cx=\"160\" cy=\"115\" [attr.r]=\"vm.hubDot\"></circle>\n        </g>\n      </svg>\n      <div class=\"fg-bottom-content\">\n        <tb-icon *ngIf=\"vm.showIcon && vm.icon\" class=\"fg-icon\">{{vm.icon}}</tb-icon>\n        <div class=\"fg-value-row\">\n          <span class=\"fg-value\" [style.font-size.px]=\"vm.valueFontPx\">{{vm.displayValue}}</span>\n          <span class=\"fg-unit\" *ngIf=\"vm.unit\" [style.font-size.px]=\"vm.unitFontPx\" [style.margin-left.px]=\"vm.unitGap\">{{vm.unit}}</span>\n        </div>\n        <div class=\"fg-caption\" *ngIf=\"vm.showCaption\">{{vm.caption}}</div>\n      </div>\n    </div>\n  </div>\n  <div class=\"fg-footer\" *ngIf=\"vm.showMinMax\">\n    <span>{{vm.minLabel}}</span><span>{{vm.maxLabel}}</span>\n  </div>\n  <div class=\"fg-no-data\" *ngIf=\"!vm.hasData\">{{vm.noDataText}}</div>\n</div>",
+    "templateCss": ":host{display:block;border-radius:inherit;width:100%;height:100%;min-width:0;min-height:0;overflow:hidden}\n*{box-sizing:border-box}\n.fg-root{border-radius:inherit;--fg-text:#edf3f8;--fg-muted:#91a2b3;--fg-track:#293846;--fg-accent:#f2c300;--fg-needle:#ffffff;--fg-hub-dot:#101820;position:relative;width:100%;height:100%;min-height:0;padding:10px 14px 8px;display:flex;flex-direction:column;align-items:stretch;justify-content:center;overflow:hidden;background:transparent;color:var(--fg-text);font-family:Roboto,Arial,sans-serif}\n.fg-industrial{--fg-text:#edf3f8;--fg-muted:#91a2b3;--fg-track:#293846;--fg-accent:#f2c300;--fg-needle:#ffffff;--fg-hub-dot:#101820;background:radial-gradient(ellipse at 50% 80%,rgba(242,195,0,.07),transparent 62%),linear-gradient(145deg,#17232e,#101820)}\n.fg-light{--fg-text:#263445;--fg-muted:#778596;--fg-track:#e4e9ef;--fg-accent:#d99a00;--fg-needle:#1f2d3d;--fg-hub-dot:#ffffff;background:linear-gradient(145deg,#fff,#f4f7fa)}\n.fg-header{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:22px;margin-bottom:0;z-index:2;flex:0 0 auto}\n.fg-heading{display:flex;align-items:center;gap:8px;min-width:0}\n.fg-label{font-size:13px;font-weight:650;letter-spacing:.25px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}\n.fg-status{font-size:9px;line-height:16px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:0 8px;border-radius:20px;background:rgba(52,185,125,.14);color:#42c88b;white-space:nowrap}\n.fg-gauge-wrap{position:relative;width:100%;flex:1 1 auto;min-height:0;min-width:0;margin:0 auto;display:flex;align-items:center;justify-content:center}\n.fg-stage{position:relative;width:100%;aspect-ratio:4/3;max-width:100%;max-height:100%;flex:0 0 auto}\n.fg-svg{display:block;position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}\n.fg-track{fill:none;stroke:var(--fg-track);stroke-width:19;stroke-linecap:butt}\n.fg-segment{fill:none;stroke-width:19;stroke-linecap:butt}\n.fg-ticks{fill:var(--fg-muted);font-size:9px;font-weight:500}\n.fg-needle{color:var(--fg-needle);transform-box:view-box;transform-origin:160px 115px;transition:transform .7s cubic-bezier(.22,.8,.3,1);filter:drop-shadow(0 0 2px rgba(0,0,0,.55))}\n.fg-needle-body{fill:currentColor;stroke:currentColor;stroke-width:1;stroke-linejoin:round}\n.fg-needle-line{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round}\n.fg-needle-marker{fill:currentColor}\n.fg-hub{fill:currentColor}\n.fg-hub-dot{fill:var(--fg-hub-dot)}\n.fg-bottom-content{position:absolute;left:50%;top:80%;transform:translate(-50%,-50%);max-width:62%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;text-align:center;pointer-events:none}\n.fg-icon{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;font-size:18px;line-height:18px;color:var(--fg-accent);margin-bottom:1px}\n.fg-icon .mat-icon,.fg-icon mat-icon,.fg-icon svg{width:18px;height:18px;font-size:18px;line-height:18px;color:inherit;fill:currentColor}\n.fg-light .fg-icon{color:#d99a00}\n.fg-value-row{display:flex;align-items:baseline;justify-content:center;white-space:nowrap}\n.fg-value{line-height:1.02;font-weight:750;letter-spacing:-1.2px;font-variant-numeric:tabular-nums;color:var(--fg-text)}\n.fg-unit{line-height:1;font-weight:650;color:var(--fg-muted)}\n.fg-caption{font-size:8px;line-height:11px;color:var(--fg-muted);margin-top:2px;letter-spacing:.35px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}\n.fg-footer{width:100%;display:flex;justify-content:space-between;align-items:center;color:var(--fg-muted);font-size:10px;font-variant-numeric:tabular-nums;padding:0 8px;flex:0 0 auto}\n.fg-no-data{position:absolute;left:0;right:0;bottom:5px;text-align:center;color:var(--fg-muted);font-size:10px;pointer-events:none}\n@media(max-height:170px){.fg-root{padding:4px}.fg-header{min-height:16px}.fg-label{font-size:10px}.fg-icon,.fg-icon .mat-icon,.fg-icon mat-icon,.fg-icon svg{font-size:13px;width:13px;height:13px;line-height:13px}.fg-footer{font-size:8px}}",
+    "controllerScript": "var fg={dead:false};\nvar FG_DEF=[{c:'#D94B45',t:'CRÍTICO',s:'#FF5A52'},{c:'#E6A23C',t:'BAJO',s:'#FF9A3D'},{c:'#E8C547',t:'MEDIO',s:'#F2C300'},{c:'#38A879',t:'NORMAL',s:'#42C88B'}];\nfunction fgRgba(hex,a){var h=String(hex||'').trim();var m=/^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(h);if(!m)return 'rgba(66,200,139,'+a+')';var x=m[1];if(x.length===3)x=x[0]+x[0]+x[1]+x[1]+x[2]+x[2];var n=parseInt(x,16);return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';}\nfunction fgNum(v,d){var n=Number(v);return isFinite(n)&&v!==null&&v!==''?n:d;}\nfunction fgClamp(v,a,b){return Math.max(a,Math.min(b,v));}\nfunction fgPoint(cx,cy,r,a){var rad=a*Math.PI/180;return{x:cx+r*Math.cos(rad),y:cy+r*Math.sin(rad)};}\nfunction fgArc(cx,cy,r,a0,a1){var p0=fgPoint(cx,cy,r,a0),p1=fgPoint(cx,cy,r,a1);var sweep=a1>=a0?1:0;var large=Math.abs(a1-a0)>180?1:0;return'M '+p0.x.toFixed(3)+' '+p0.y.toFixed(3)+' A '+r+' '+r+' 0 '+large+' '+sweep+' '+p1.x.toFixed(3)+' '+p1.y.toFixed(3);}\nfunction fgNeedle(style,len,cx,cy){\n var f=function(n){return n.toFixed(2);};\n var o={path:'',filled:true,marker:'',hub:0,dot:0};\n if(style==='none')return o;\n if(style==='thin'){\n   o.path='M '+f(cx-14)+' '+f(cy)+' L '+f(cx+len)+' '+f(cy);o.filled=false;o.hub=5.5;o.dot=0;return o;\n }\n o.path='M '+f(cx-16)+' '+f(cy-3)+' L '+f(cx)+' '+f(cy-5)+' L '+f(cx+len)+' '+f(cy)+' L '+f(cx)+' '+f(cy+5)+' L '+f(cx-16)+' '+f(cy+3)+' Z';\n o.hub=9;o.dot=3.2;\n if(style==='pointer'){o.marker='M '+f(cx+107)+' '+f(cy)+' L '+f(cx+121)+' '+f(cy-7.5)+' L '+f(cx+121)+' '+f(cy+7.5)+' Z';}\n return o;\n}\nfunction fgBuild(){\n var ctx=self.ctx,s=ctx.settings||{},d=ctx.data||[];\n var min=fgNum(s.minValue,0),max=fgNum(s.maxValue,100);\n if(max<=min)max=min+1;\n // Last value: último punto de la primera serie\n var raw=null;\n if(d.length&&d[0]&&Array.isArray(d[0].data)&&d[0].data.length){raw=d[0].data[d[0].data.length-1][1];}\n var has=raw!==null&&raw!==undefined&&raw!==''&&isFinite(Number(raw));\n var val=has?Number(raw):min;\n var ratio=(fgClamp(val,min,max)-min)/(max-min);\n // Arco de 234°: la abertura de 126° queda siempre abajo.\n var right=s.startSide==='right';\n var start=right?27:153,end=right?-207:387;\n var cx=160,cy=115,r=94;\n var track=fgArc(cx,cy,r,start,end);\n var colors=Array.isArray(s.sections)&&s.sections.length?s.sections:[{color:'#D94B45'},{color:'#E6A23C'},{color:'#E8C547'},{color:'#38A879'}];\n var n=Math.min(12,colors.length),segs=[];\n for(var i=0;i<n;i++){\n   var a=start+(end-start)*(i/n),b=start+(end-start)*((i+1)/n);\n   segs.push({path:fgArc(cx,cy,r,a,b),color:colors[i].color||'#38A879'});\n }\n var ticks=[];\n if(s.showScale){\n   for(var j=0;j<=4;j++){\n     var ta=start+(end-start)*(j/4),p=fgPoint(cx,cy,r+18,ta);\n     ticks.push({x:p.x.toFixed(1),y:(p.y+3).toFixed(1),label:String(Math.round(min+(max-min)*j/4))});\n   }\n }\n // Aguja\n var ns=['classic','thin','pointer','none'].indexOf(s.needleStyle)>=0?s.needleStyle:'classic';\n var nlen=fgClamp(fgNum(s.needleLength,92),40,112);\n var nd=fgNeedle(ns,nlen,cx,cy);\n var angle=start+(end-start)*ratio;\n var needleColor=(s.needleColorAuto===false&&s.needleColor)?s.needleColor:null;\n // Tamaño disponible para el gauge (el texto queda anclado al mismo cuadro que el SVG)\n var W=fgNum(ctx.width,0),H=fgNum(ctx.height,0);\n var showLabel=s.showLabel!==false;\n var stageW=null,stageH=null,scale=1;\n if(W>0&&H>0){\n   var aw=W-28,ah=H-18-(showLabel?22:0)-(s.showMinMax===true?16:0);\n   if(H<=170){aw=W-8;ah=H-8-(showLabel?16:0)-(s.showMinMax===true?14:0);}\n   scale=fgClamp(Math.min(aw/320,ah/240),.25,3);\n   stageW=Math.floor(320*scale);stageH=Math.floor(240*scale);\n }\n var valuePx=s.valueSizeMode==='fixed'\n   ? fgClamp(fgNum(s.valueSize,37),10,160)\n   : fgClamp(37*scale*fgNum(s.valueScale,100)/100,10,200);\n var unitPx=Math.max(7,valuePx*fgClamp(fgNum(s.unitScale,38),15,100)/100);\n var decimals=fgClamp(fgNum(s.decimals,1),0,4);\n var display=has?val.toFixed(decimals):'—';\n var idx=has?Math.min(n-1,Math.floor(ratio*n)):0;\n var seg=colors[idx]||{},dflt=FG_DEF[idx]||FG_DEF[FG_DEF.length-1];\n var status=has?((seg.statusText!==undefined&&seg.statusText!==null)?String(seg.statusText):dflt.t):'';\n var statusColor=seg.statusColor||dflt.s;\n var statusBg=fgRgba(statusColor,.16);\n var br=(ctx.widgetConfig&&ctx.widgetConfig.borderRadius)||null;\n self.ctx.$scope.vm={\n   borderRadius:br,theme:s.theme||'industrial',label:s.label||'Fuel Level',showLabel:showLabel,\n   showIcon:s.showIcon===true,icon:(typeof s.icon==='string'&&s.icon.trim())?s.icon.trim():'local_gas_station',\n   showStatus:s.showStatus===true,status:status,statusColor:statusColor,statusBg:statusBg,\n   trackPath:track,segments:segs,ticks:ticks,showScale:s.showScale===true,\n   needleStyle:ns,needlePath:nd.path,needleFilled:nd.filled,markerPath:nd.marker,hubRadius:nd.hub,hubDot:nd.dot,\n   needleTransform:'rotate('+angle.toFixed(2)+'deg)',needleColor:needleColor,\n   stageW:stageW,stageH:stageH,valueFontPx:Math.round(valuePx*10)/10,unitFontPx:Math.round(unitPx*10)/10,\n   unitGap:fgClamp(fgNum(s.unitGap,4),0,30),\n   displayValue:display,unit:s.unit||'',showCaption:s.showCaption===true,caption:s.caption||'',\n   showMinMax:s.showMinMax===true,minLabel:String(min),maxLabel:String(max),\n   hasData:has,noDataText:s.noDataText||'Sin datos'\n };\n if(ctx.detectChanges)ctx.detectChanges();\n}\nself.onInit=function(){fg.dead=false;self.ctx.$scope.vm={theme:'industrial',segments:[],ticks:[],trackPath:'',displayValue:'—',hasData:false,needleStyle:'none'};fgBuild();};\nself.onDataUpdated=function(){if(!fg.dead)fgBuild();};\nself.onLatestDataUpdated=function(){if(!fg.dead)fgBuild();};\nself.onResize=function(){if(!fg.dead)fgBuild();};\nself.onDestroy=function(){fg.dead=true;};\nself.typeParameters=function(){return{maxDatasources:1,maxDataKeys:1,datasourcesOptional:false,dataKeysOptional:false,previewWidth:'360px',previewHeight:'280px'};};",
+    "settingsForm": [
+      {
+        "id": "theme",
+        "name": "Tema visual",
+        "type": "select",
+        "group": "01. Apariencia",
+        "default": "industrial",
+        "items": [
+          {
+            "value": "industrial",
+            "label": "Industrial - Caterpillar / Grafana"
+          },
+          {
+            "value": "executive",
+            "label": "Claro - Gerencial"
+          }
+        ]
+      },
+      {
+        "id": "label",
+        "name": "Título",
+        "type": "text",
+        "group": "01. Apariencia",
+        "default": "Fuel Level"
+      },
+      {
+        "id": "showLabel",
+        "name": "Mostrar título",
+        "type": "switch",
+        "group": "01. Apariencia",
+        "default": true
+      },
+      {
+        "id": "showIcon",
+        "name": "Mostrar icono",
+        "type": "switch",
+        "group": "01. Apariencia",
+        "default": true
+      },
+      {
+        "id": "icon",
+        "name": "Icono Material de ThingsBoard",
+        "type": "icon",
+        "group": "01. Apariencia",
+        "default": "local_gas_station",
+        "condition": "return model.showIcon === true;"
+      },
+      {
+        "id": "showStatus",
+        "name": "Mostrar estado textual (según segmento activo)",
+        "type": "switch",
+        "group": "01. Apariencia",
+        "default": false
+      },
+      {
+        "id": "startSide",
+        "name": "Inicio del arco",
+        "type": "select",
+        "group": "02. Geometría",
+        "default": "left",
+        "items": [
+          {
+            "value": "left",
+            "label": "Izquierda"
+          },
+          {
+            "value": "right",
+            "label": "Derecha"
+          }
+        ]
+      },
+      {
+        "id": "arcAngle",
+        "name": "Apertura del arco (grados)",
+        "type": "number",
+        "group": "02. Geometría",
+        "default": 234,
+        "min": 180,
+        "max": 300,
+        "hint": "234° equivale al 65% de una circunferencia."
+      },
+      {
+        "id": "minValue",
+        "name": "Valor mínimo",
+        "type": "number",
+        "group": "03. Escala y valor",
+        "default": 0
+      },
+      {
+        "id": "maxValue",
+        "name": "Valor máximo",
+        "type": "number",
+        "group": "03. Escala y valor",
+        "default": 100
+      },
+      {
+        "id": "unit",
+        "name": "Unidad",
+        "type": "text",
+        "group": "03. Escala y valor",
+        "default": "%"
+      },
+      {
+        "id": "decimals",
+        "name": "Decimales",
+        "type": "number",
+        "group": "03. Escala y valor",
+        "default": 1,
+        "min": 0,
+        "max": 4
+      },
+      {
+        "id": "valueSizeMode",
+        "name": "Tamaño del número",
+        "type": "select",
+        "group": "03. Escala y valor",
+        "default": "auto",
+        "items": [
+          {
+            "value": "auto",
+            "label": "Automático (se adapta al widget)"
+          },
+          {
+            "value": "fixed",
+            "label": "Fijo en píxeles"
+          }
+        ]
+      },
+      {
+        "id": "valueScale",
+        "name": "Escala del número (%)",
+        "type": "number",
+        "group": "03. Escala y valor",
+        "default": 100,
+        "min": 30,
+        "max": 300,
+        "hint": "100% = tamaño base. Aumenta o reduce el número manteniendo el ajuste automático.",
+        "condition": "return model.valueSizeMode !== 'fixed';"
+      },
+      {
+        "id": "valueSize",
+        "name": "Tamaño del número (px)",
+        "type": "number",
+        "group": "03. Escala y valor",
+        "default": 37,
+        "min": 10,
+        "max": 160,
+        "condition": "return model.valueSizeMode === 'fixed';"
+      },
+      {
+        "id": "unitScale",
+        "name": "Tamaño de la unidad (% del número)",
+        "type": "number",
+        "group": "03. Escala y valor",
+        "default": 38,
+        "min": 15,
+        "max": 100,
+        "hint": "La unidad se muestra al lado del número, alineada a su base."
+      },
+      {
+        "id": "unitGap",
+        "name": "Separación número-unidad (px)",
+        "type": "number",
+        "group": "03. Escala y valor",
+        "default": 4,
+        "min": 0,
+        "max": 30
+      },
+      {
+        "id": "showScale",
+        "name": "Mostrar escala numérica",
+        "type": "switch",
+        "group": "03. Escala y valor",
+        "default": false
+      },
+      {
+        "id": "showMinMax",
+        "name": "Mostrar mínimo y máximo debajo",
+        "type": "switch",
+        "group": "03. Escala y valor",
+        "default": false
+      },
+      {
+        "id": "showCaption",
+        "name": "Mostrar texto secundario",
+        "type": "switch",
+        "group": "03. Escala y valor",
+        "default": false
+      },
+      {
+        "id": "caption",
+        "name": "Texto secundario",
+        "type": "text",
+        "group": "03. Escala y valor",
+        "default": "CAPACIDAD DISPONIBLE",
+        "condition": "return model.showCaption === true;"
+      },
+      {
+        "id": "needleStyle",
+        "name": "Estilo del indicador",
+        "type": "select",
+        "group": "04. Indicador (aguja)",
+        "default": "classic",
+        "items": [
+          {
+            "value": "classic",
+            "label": "Aguja clásica con pivote"
+          },
+          {
+            "value": "thin",
+            "label": "Aguja fina con punto central"
+          },
+          {
+            "value": "pointer",
+            "label": "Aguja + marcador exterior"
+          },
+          {
+            "value": "none",
+            "label": "Sin indicador"
+          }
+        ]
+      },
+      {
+        "id": "needleLength",
+        "name": "Longitud de la aguja",
+        "type": "number",
+        "group": "04. Indicador (aguja)",
+        "default": 92,
+        "min": 40,
+        "max": 112,
+        "hint": "El arco va de 84 a 104. Con 92 la punta llega al centro de la banda de color.",
+        "condition": "return model.needleStyle !== 'none';"
+      },
+      {
+        "id": "needleColorAuto",
+        "name": "Color automático según tema",
+        "type": "switch",
+        "group": "04. Indicador (aguja)",
+        "default": true,
+        "condition": "return model.needleStyle !== 'none';"
+      },
+      {
+        "id": "needleColor",
+        "name": "Color de la aguja",
+        "type": "color",
+        "group": "04. Indicador (aguja)",
+        "default": "#FFFFFF",
+        "condition": "return model.needleStyle !== 'none' && model.needleColorAuto === false;"
+      },
+      {
+        "id": "sections",
+        "name": "Segmentos del arco y su estado (orden desde el inicio)",
+        "type": "array",
+        "group": "05. Segmentos y colores",
+        "default": [
+          {
+            "color": "#D94B45",
+            "statusText": "CRÍTICO",
+            "statusColor": "#FF5A52"
+          },
+          {
+            "color": "#E6A23C",
+            "statusText": "BAJO",
+            "statusColor": "#FF9A3D"
+          },
+          {
+            "color": "#E8C547",
+            "statusText": "MEDIO",
+            "statusColor": "#F2C300"
+          },
+          {
+            "color": "#38A879",
+            "statusText": "NORMAL",
+            "statusColor": "#42C88B"
+          }
+        ],
+        "arrayItemType": "fieldset",
+        "minItems": 1,
+        "maxItems": 12,
+        "properties": [
+          {
+            "id": "color",
+            "name": "Color del segmento (arco)",
+            "type": "color",
+            "default": "#38A879"
+          },
+          {
+            "id": "statusText",
+            "name": "Texto del estado",
+            "type": "text",
+            "default": "NORMAL"
+          },
+          {
+            "id": "statusColor",
+            "name": "Color del texto del estado",
+            "type": "color",
+            "default": "#42C88B"
+          }
+        ],
+        "hint": "Cada segmento tiene su color de arco y, de forma independiente, el texto y color del estado que se muestra cuando la aguja cae dentro de él."
+      },
+      {
+        "id": "noDataText",
+        "name": "Texto cuando no hay datos",
+        "type": "text",
+        "group": "06. Avanzado",
+        "default": "Sin datos"
+      }
+    ],
+    "dataKeySettingsForm": [],
+    "defaultConfig": "{\"datasources\":[{\"type\":\"function\",\"name\":\"function\",\"dataKeys\":[{\"name\":\"f(x)\",\"type\":\"function\",\"label\":\"fuel_level\",\"color\":\"#f2c300\",\"settings\":{},\"funcBody\":\"var value = (prevValue || 60) + Math.floor(Math.random() * 11) - 5;\\nif (value < 0) { value = 0; } else if (value > 100) { value = 100; }\\nreturn value;\"}]}],\"showTitle\":false,\"padding\":\"0px\",\"margin\":\"0px\",\"borderRadius\":\"0px\",\"dropShadow\":false,\"widgetStyle\":{\"background\":\"transparent\",\"borderRadius\":\"0px\",\"overflow\":\"hidden\"},\"settings\":{\"theme\":\"industrial\",\"label\":\"Fuel Level\",\"showLabel\":true,\"showIcon\":true,\"icon\":\"local_gas_station\",\"showStatus\":false,\"startSide\":\"left\",\"arcAngle\":234,\"minValue\":0,\"maxValue\":100,\"unit\":\"%\",\"decimals\":1,\"valueSizeMode\":\"auto\",\"valueScale\":100,\"valueSize\":37,\"unitScale\":38,\"unitGap\":4,\"showScale\":false,\"showMinMax\":false,\"showCaption\":false,\"caption\":\"CAPACIDAD DISPONIBLE\",\"needleStyle\":\"classic\",\"needleLength\":92,\"needleColorAuto\":true,\"needleColor\":\"#FFFFFF\",\"sections\":[{\"color\":\"#D94B45\",\"statusText\":\"CRÍTICO\",\"statusColor\":\"#FF5A52\"},{\"color\":\"#E6A23C\",\"statusText\":\"BAJO\",\"statusColor\":\"#FF9A3D\"},{\"color\":\"#E8C547\",\"statusText\":\"MEDIO\",\"statusColor\":\"#F2C300\"},{\"color\":\"#38A879\",\"statusText\":\"NORMAL\",\"statusColor\":\"#42C88B\"}],\"noDataText\":\"Sin datos\"},\"title\":\"SMELPRO Fuel Gauge\",\"backgroundColor\":\"rgba(0, 0, 0, 0)\"}"
+  },
+  "resources": [],
+  "scada": false,
+  "tags": [
+    "smelpro",
+    "gauge",
+    "fuel-gauge",
+    "industrial",
+    "svg",
+    "thingsboard-ce",
+    "last-value",
+    "needle"
+  ]
+}

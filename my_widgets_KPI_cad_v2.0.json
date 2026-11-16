@@ -1,0 +1,412 @@
+{
+  "fqn": "my_widgets.KPI_card",
+  "name": "my widgets KPI card",
+  "deprecated": false,
+  "image": null,
+  "description": "Tarjeta KPI con valor de telemetría o atributo, unidad opcional, comparación contra un valor máximo (de datos o manual), barra de porcentaje con color seleccionable y fondo tenue, y texto resumen \"X de Y, Z% + texto\".",
+  "descriptor": {
+    "type": "latest",
+    "sizeX": 4,
+    "sizeY": 2,
+    "resources": [],
+    "templateHtml": "<div class=\"kp-root\" *ngIf=\"vm\" [class.kp-light]=\"vm.theme==='executive'\" [class.kp-industrial]=\"vm.theme==='industrial'\" [class.kp-themebg]=\"vm.themeBg\" [style.border-radius]=\"vm.radius\" [style.padding-top.px]=\"vm.padTop\" [style.padding-left.px]=\"vm.padSide\" [style.padding-right.px]=\"vm.padSide\" [style.padding-bottom.px]=\"vm.padBottom\">\n  <div class=\"kp-header\" *ngIf=\"vm.hasHeader\">\n    <span class=\"kp-icon\" *ngIf=\"vm.showIcon && vm.icon\" [style.color]=\"vm.iconColor\" [style.background-color]=\"vm.iconBg\" [style.border-color]=\"vm.iconBorder\">\n      <tb-icon>{{vm.icon}}</tb-icon>\n    </span>\n    <span class=\"kp-title\" *ngIf=\"vm.showTitle\">{{vm.title}}</span>\n  </div>\n\n  <div class=\"kp-body\"><div class=\"kp-inner\" [class.kp-nolabel]=\"!vm.valueLabel\">\n    <div class=\"kp-label\" *ngIf=\"vm.valueLabel\">{{vm.valueLabel}}</div>\n    <div class=\"kp-value-line\" [style.font-size]=\"vm.valueFont\">\n      <span class=\"kp-value\" [style.color]=\"vm.valueColor\">{{vm.valueText}}</span><span class=\"kp-unit\" *ngIf=\"vm.unit\" [style.font-size.em]=\"vm.unitScale\">{{vm.unit}}</span>\n      <span class=\"kp-badge\" *ngIf=\"vm.showPercentBadge && vm.hasPct\" [style.color]=\"vm.barColor\" [style.background-color]=\"vm.badgeBg\">{{vm.pctText}}%</span>\n    </div>\n    <div class=\"kp-bar\" *ngIf=\"vm.showBar\" [style.height.px]=\"vm.barHeight\">\n      <div class=\"kp-track\" [style.background-color]=\"vm.barColor\" [style.opacity]=\"vm.trackOpacity\"></div>\n      <div class=\"kp-fill\" [style.width.%]=\"vm.barPct\" [style.background-color]=\"vm.barColor\"></div>\n    </div>\n    <div class=\"kp-summary\" *ngIf=\"vm.showSummary\"><span *ngFor=\"let seg of vm.summary\" [class.kp-strong]=\"seg.b\" [style.color]=\"seg.c\">{{seg.t}}</span></div>\n  </div></div>\n  <div class=\"kp-no-data\" *ngIf=\"!vm.hasData\">{{vm.noDataText}}</div>\n</div>",
+    "templateCss": ":host{display:block;width:100%;height:100%;min-width:0;min-height:0;overflow:hidden}\n*{box-sizing:border-box}\n.kp-root{--kp-bg:#111820;--kp-text:#edf3f8;--kp-muted:#9aa9b8;width:100%;height:100%;padding:3px 10px;display:flex;flex-direction:column;gap:8px;overflow:hidden;border-radius:inherit;background:transparent;color:var(--kp-text);font-family:Roboto,Arial,sans-serif;position:relative;container-type:inline-size}\n.kp-themebg.kp-industrial{background:linear-gradient(145deg,#17232e,#101820)}\n.kp-light{--kp-bg:#fff;--kp-text:#263445;--kp-muted:#778596}\n.kp-themebg.kp-light{background:linear-gradient(145deg,#fff,#f3f6f9)}\n.kp-header{display:flex;align-items:center;gap:9px;min-height:32px;flex:0 0 auto}\n.kp-icon{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;border:1px solid transparent;flex:0 0 auto}\n.kp-icon tb-icon,.kp-icon .mat-icon,.kp-icon mat-icon{font-size:20px;width:20px;height:20px;color:inherit}\n:host ::ng-deep .kp-icon tb-icon,:host ::ng-deep .kp-icon .mat-icon,:host ::ng-deep .kp-icon mat-icon,:host ::ng-deep .kp-icon svg{color:inherit;fill:currentColor;font-size:20px;width:20px;height:20px;line-height:20px}\n.kp-title{font-size:13px;font-weight:700;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}\n.kp-body{flex:1 1 0;min-height:0;container-type:size}\n.kp-inner{height:100%;display:flex;flex-direction:column;justify-content:center;gap:7px;gap:clamp(3px,6.6cqh,18px)}\n.kp-label:empty{display:none}\n.kp-label{font-size:10px;font-size:clamp(8px,min(8.9cqh,3.4cqw),18px);color:var(--kp-muted);font-weight:650;letter-spacing:.5px;text-transform:uppercase}\n.kp-value-line{display:flex;align-items:baseline;gap:.14em;min-width:0;font-size:clamp(28px,6vw,48px)}\n.kp-value{font-size:1em;font-weight:800;line-height:1;letter-spacing:-1.6px;font-variant-numeric:tabular-nums;white-space:nowrap}\n.kp-unit{font-weight:650;line-height:1;color:var(--kp-muted);white-space:nowrap}\n.kp-badge{margin-left:auto;align-self:center;font-size:12px;font-size:clamp(10px,11cqh,20px);font-weight:800;padding:3px 10px;border-radius:999px;white-space:nowrap;font-variant-numeric:tabular-nums}\n.kp-bar{position:relative;width:100%;border-radius:999px;overflow:hidden;flex:0 0 auto}\n.kp-track{position:absolute;left:0;top:0;right:0;bottom:0;border-radius:inherit}\n.kp-fill{position:absolute;left:0;top:0;bottom:0;border-radius:inherit;transition:width .6s ease;background-image:linear-gradient(180deg,rgba(255,255,255,.32),rgba(255,255,255,0) 60%)}\n.kp-summary{font-size:12px;font-size:clamp(9px,min(11.8cqh,4.3cqw),22px);color:var(--kp-muted);white-space:pre-wrap;line-height:1.4}\n.kp-summary .kp-strong{font-weight:750;color:var(--kp-text)}\n.kp-no-data{position:absolute;left:0;right:0;bottom:3px;text-align:center;color:var(--kp-muted);font-size:9px;pointer-events:none}\n@container (max-width:230px){.kp-title{font-size:11px}.kp-badge{padding:2px 7px}}\n",
+    "controllerScript": "var kp = {dead:false,neutral:false};\nfunction kpNum(v){\n  if(v===null||v===undefined||v==='')return null;\n  var n=typeof v==='number'?v:parseFloat(String(v).replace(/\\s/g,'').replace(',','.'));\n  return isFinite(n)?n:null;\n}\nfunction kpClamp(v,a,b){return Math.max(a,Math.min(b,v));}\nfunction kpFmt(n,dec,fmt){\n  if(n===null||n===undefined)return '—';\n  dec=kpClamp(Math.round(dec),0,6);\n  if(fmt==='none')return n.toFixed(dec);\n  return n.toLocaleString(fmt==='es'?'de-DE':'en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec,useGrouping:true});\n}\nfunction kpHexA(hex,a){\n  var h=String(hex||'').trim().replace('#','');\n  if(h.length===3)h=h.charAt(0)+h.charAt(0)+h.charAt(1)+h.charAt(1)+h.charAt(2)+h.charAt(2);\n  if(!/^[0-9a-fA-F]{6}$/.test(h))return 'rgba(128,140,152,'+a+')';\n  return 'rgba('+parseInt(h.slice(0,2),16)+','+parseInt(h.slice(2,4),16)+','+parseInt(h.slice(4,6),16)+','+a+')';\n}\nfunction kpContrast(hex){\n  var h=String(hex||'').trim().replace('#','');\n  if(h.length===3)h=h.charAt(0)+h.charAt(0)+h.charAt(1)+h.charAt(1)+h.charAt(2)+h.charAt(2);\n  if(!/^[0-9a-fA-F]{6}$/.test(h))return '#ffffff';\n  var l=(0.299*parseInt(h.slice(0,2),16)+0.587*parseInt(h.slice(2,4),16)+0.114*parseInt(h.slice(4,6),16))/255;\n  return l>0.62?'#14181d':'#ffffff';\n}\nfunction kpFindSeries(data,keyName,index){\n  if(keyName){\n    for(var i=0;i<data.length;i++){\n      var k=data[i]&&data[i].dataKey?data[i].dataKey:{};\n      if((k.name||k.label)===keyName||k.label===keyName)return data[i];\n    }\n    return null;\n  }\n  return data[index]||null;\n}\nfunction kpLast(series){\n  if(!series||!Array.isArray(series.data)||!series.data.length)return null;\n  var p=series.data[series.data.length-1];\n  return p&&p.length>=2?kpNum(p[1]):null;\n}\nvar kpPatched=[];\nfunction kpRestore(){\n  kpPatched.forEach(function(p){\n    if(p.prev===null||p.prev==='')p.el.style.removeProperty('background-color');\n    else p.el.style.setProperty('background-color',p.prev,p.prio);\n  });\n  kpPatched=[];kp.neutral=false;\n}\nfunction kpNeutralize(){\n  kpRestore();\n  try{\n    var el=self.ctx.$container&&self.ctx.$container[0];\n    for(var i=0;el&&i<4;i++,el=el.parentElement){\n      var cs=window.getComputedStyle(el),bg=cs.backgroundColor;\n      if(bg&&bg!=='transparent'&&bg!=='rgba(0, 0, 0, 0)'){\n        kpPatched.push({el:el,prev:el.style.getPropertyValue('background-color'),prio:el.style.getPropertyPriority('background-color')});\n        el.style.setProperty('background-color','transparent','important');\n      }\n      var rad=cs.borderTopLeftRadius,cls=typeof el.className==='string'?el.className:'';\n      if((rad&&rad!=='0px')||/tb-widget/.test(cls))break;\n    }\n    kp.neutral=true;\n  }catch(e){}\n}\nfunction kpRadius(){\n  var ctx=self.ctx,cfg=ctx.widgetConfig||{},r=cfg.borderRadius;\n  if(typeof r==='number')r=r+'px';\n  if(typeof r==='string'&&r.trim()!=='')return r.trim();\n  try{\n    var el=ctx.$container&&ctx.$container[0];\n    for(var i=0;el&&i<8;i++,el=el.parentElement){\n      var br=window.getComputedStyle(el).borderTopLeftRadius;\n      if(br&&br!=='0px')return br;\n    }\n  }catch(e){}\n  return null;\n}\nfunction kpBuild(){\n  var ctx=self.ctx,s=ctx.settings||{},data=ctx.data||[];\n  var theme=s.theme==='executive'?'executive':'industrial';\n  var decimals=kpClamp(kpNum(s.decimals)===null?0:kpNum(s.decimals),0,4);\n  var pdec=kpClamp(kpNum(s.percentDecimals)===null?0:kpNum(s.percentDecimals),0,3);\n  var fmt=s.numberFormat==='es'||s.numberFormat==='none'?s.numberFormat:'en';\n  var barColor=s.barColor||'#F2C300';\n\n  var value=kpLast(kpFindSeries(data,(s.valueKey||'').trim(),0));\n  var refSource=s.referenceSource==='datakey'?'datakey':'manual';\n  var ref=refSource==='datakey'?kpLast(kpFindSeries(data,(s.referenceKey||'').trim(),1)):kpNum(s.referenceManual===undefined?10000:s.referenceManual);\n  var has=value!==null,hasRef=ref!==null&&ref>0;\n  var pct=has&&hasRef?value/ref*100:null;\n  var pctShown=pct===null?null:(s.clampPercent===false?pct:Math.min(pct,100));\n  if(pctShown!==null&&pctShown<0)pctShown=0;\n  var barPct=pct===null?0:kpClamp(pct,0,100);\n\n  var unit=(s.unit||'').trim();\n  var refUnit=s.referenceSameUnit===false?(s.referenceUnit||'').trim():unit;\n  var valueText=has?kpFmt(value,decimals,fmt):'—';\n  var refText=hasRef?kpFmt(ref,decimals,fmt):'—';\n  var pctText=pctShown===null?'—':kpFmt(pctShown,pdec,fmt);\n  var connector=(s.summaryConnector===undefined?'de':String(s.summaryConnector)).trim();\n  var suffix=(s.summaryText===undefined?'de la capacidad':String(s.summaryText)).trim();\n\n  var seg=[];\n  seg.push({t:valueText,b:true});\n  if(unit)seg.push({t:' '+unit});\n  seg.push({t:' '+(connector?connector+' ':'')});\n  seg.push({t:refText,b:true});\n  if(refUnit)seg.push({t:' '+refUnit});\n  seg.push({t:', '});\n  seg.push({t:pctText+'%',b:true,c:barColor});\n  if(suffix)seg.push({t:' '+suffix});\n\n  var wEm=0,vt=String(valueText);\n  for(var ci=0;ci<vt.length;ci++){var ch=vt.charAt(ci);wEm+=(ch===','||ch==='.')?0.3:(ch==='-'?0.4:0.62);}\n  wEm+=unit?(unit.length*0.6*(kpClamp(kpNum(s.unitSize)===null?38:kpNum(s.unitSize),10,100)/100)+0.14):0;\n  var labelOn=!!(s.showLabel===false?'':(s.valueLabel===undefined?'VALOR ACTUAL':String(s.valueLabel===null?'':s.valueLabel).trim()));\n  var badgeOn=s.showPercentBadge!==false&&pct!==null;\n  var wLimit=Math.max(8,(100-(badgeOn?24:4))/Math.max(1.4,wEm));\n  var valueFont='clamp(18px,min('+(labelOn?39.5:52)+'cqh,'+wLimit.toFixed(1)+'cqw),150px)';\n  var wantNeutral=s.cardBackground!=='transparent'&&s.clearNativeBg!==false;\n  if(wantNeutral&&!kp.neutral)kpNeutralize();else if(!wantNeutral&&kp.neutral)kpRestore();\n  var thick={thin:3,normal:6,thick:10}[s.barThickness]||6;\n  var iconColor=s.iconColorMode==='custom'&&s.iconColor?s.iconColor:barColor;\n  var iconStyle=['tile','solid','outline','plain'].indexOf(s.iconStyle)>=0?s.iconStyle:'tile';\n  var iconBg=kpHexA(iconColor,.14),iconBorder=kpHexA(iconColor,.3),iconFg=iconColor;\n  if(iconStyle==='solid'){iconBg=iconColor;iconBorder=iconColor;iconFg=kpContrast(iconColor);}\n  else if(iconStyle==='outline'){iconBg='transparent';iconBorder=kpHexA(iconColor,.65);}\n  else if(iconStyle==='plain'){iconBg='transparent';iconBorder='transparent';}\n  var unitScale=kpClamp(kpNum(s.unitSize)===null?38:kpNum(s.unitSize),10,100)/100;\n  var legacy=kpNum(s.contentPadding);\n  var padX=kpClamp(kpNum(s.paddingX)===null?(legacy===null?10:legacy):kpNum(s.paddingX),0,40);\n  var padY=kpClamp(kpNum(s.paddingY)===null?3:kpNum(s.paddingY),0,40);\n  var hasHeader=s.showHeader!==false&&((s.showTitle!==false&&String(s.title===undefined?'KPI':s.title).length>0)||(s.showIcon!==false&&!!(s.icon||'insights')));\n  ctx.$scope.vm={\n    theme:theme,themeBg:s.cardBackground!=='transparent',radius:kpRadius(),\n    showHeader:s.showHeader!==false,showTitle:s.showTitle!==false,title:s.title===undefined?'KPI':s.title,\n    hasHeader:hasHeader,padTop:hasHeader?kpClamp(kpNum(s.paddingTop)===null?6:kpNum(s.paddingTop),0,40):padY,padSide:padX,padBottom:padY,\n    showIcon:s.showIcon!==false,icon:s.icon||'insights',\n    badgeBg:kpHexA(barColor,.14),iconColor:iconFg,iconBg:iconBg,iconBorder:iconBorder,unitScale:unitScale,\n    valueLabel:s.showLabel===false?'':(s.valueLabel===undefined?'VALOR ACTUAL':String(s.valueLabel===null?'':s.valueLabel).trim()),\n    valueText:valueText,valueFont:valueFont,unit:unit,hasData:has,\n    valueColor:s.valueUsesBarColor===true?barColor:null,\n    showPercentBadge:s.showPercentBadge!==false,hasPct:pct!==null,pctText:pctText,\n    showBar:s.showBar!==false,barColor:barColor,barPct:barPct,barHeight:thick,\n    trackOpacity:kpClamp(kpNum(s.trackOpacity)===null?0.22:kpNum(s.trackOpacity),0.05,0.6),\n    showSummary:s.showSummary!==false,summary:has&&hasRef?seg:[{t:has?'Sin valor máximo válido':' '}],\n    noDataText:s.noDataText===undefined?'Sin datos':s.noDataText\n  };\n  if(ctx.detectChanges)ctx.detectChanges();\n}\nself.onInit=function(){kp.dead=false;self.ctx.$scope.vm={theme:'industrial',themeBg:true,hasHeader:true,padTop:6,padSide:10,padBottom:3,radius:null,showHeader:true,showTitle:true,title:'KPI',barColor:'#F2C300',summary:[],hasData:false,valueText:'—'};kpBuild();};\nself.onDataUpdated=function(){if(!kp.dead)kpBuild();};\nself.onLatestDataUpdated=function(){if(!kp.dead)kpBuild();};\nself.onResize=function(){if(!kp.dead)kpBuild();};\nself.onDestroy=function(){kp.dead=true;kpRestore();};\nself.typeParameters=function(){return{maxDatasources:1,maxDataKeys:2,datasourcesOptional:true,dataKeysOptional:true,previewWidth:'380px',previewHeight:'190px'};};\n",
+    "settingsForm": [
+      {
+        "id": "theme",
+        "name": "Tema visual",
+        "type": "select",
+        "group": "01. Apariencia",
+        "default": "industrial",
+        "items": [
+          {
+            "value": "industrial",
+            "label": "Industrial (oscuro)"
+          },
+          {
+            "value": "executive",
+            "label": "Ejecutivo (claro)"
+          }
+        ]
+      },
+      {
+        "id": "cardBackground",
+        "name": "Fondo de la tarjeta",
+        "type": "select",
+        "group": "01. Apariencia",
+        "default": "theme",
+        "items": [
+          {
+            "value": "theme",
+            "label": "Degradado del tema (esquinas exteriores transparentes)"
+          },
+          {
+            "value": "transparent",
+            "label": "Transparente (usa el fondo nativo del widget)"
+          }
+        ]
+      },
+      {
+        "id": "clearNativeBg",
+        "name": "Quitar el fondo nativo detrás de la tarjeta",
+        "type": "switch",
+        "group": "01. Apariencia",
+        "default": true,
+        "condition": "return model.cardBackground !== 'transparent';"
+      },
+      {
+        "id": "title",
+        "name": "Título",
+        "type": "text",
+        "group": "01. Apariencia",
+        "default": "Capacidad utilizada"
+      },
+      {
+        "id": "showHeader",
+        "name": "Mostrar encabezado",
+        "type": "switch",
+        "group": "01. Apariencia",
+        "default": true
+      },
+      {
+        "id": "paddingTop",
+        "name": "Separación superior del encabezado (px)",
+        "type": "number",
+        "group": "01. Apariencia",
+        "default": 6,
+        "min": 0,
+        "max": 40,
+        "condition": "return model.showHeader !== false;"
+      },
+      {
+        "id": "paddingX",
+        "name": "Margen lateral (px)",
+        "type": "number",
+        "group": "01. Apariencia",
+        "default": 10,
+        "min": 0,
+        "max": 40
+      },
+      {
+        "id": "paddingY",
+        "name": "Margen superior e inferior (px)",
+        "type": "number",
+        "group": "01. Apariencia",
+        "default": 3,
+        "min": 0,
+        "max": 40
+      },
+      {
+        "id": "showTitle",
+        "name": "Mostrar título",
+        "type": "switch",
+        "group": "01. Apariencia",
+        "default": true
+      },
+      {
+        "id": "showIcon",
+        "name": "Mostrar icono",
+        "type": "switch",
+        "group": "01. Apariencia",
+        "default": true
+      },
+      {
+        "id": "icon",
+        "name": "Icono (biblioteca de ThingsBoard)",
+        "type": "icon",
+        "group": "01. Apariencia",
+        "default": "insights",
+        "condition": "return model.showIcon === true;"
+      },
+      {
+        "id": "iconStyle",
+        "name": "Estilo del icono",
+        "type": "select",
+        "group": "01. Apariencia",
+        "default": "tile",
+        "items": [
+          {
+            "value": "tile",
+            "label": "Recuadro tenue (como el ejemplo)"
+          },
+          {
+            "value": "solid",
+            "label": "Recuadro sólido"
+          },
+          {
+            "value": "outline",
+            "label": "Solo contorno"
+          },
+          {
+            "value": "plain",
+            "label": "Sin recuadro"
+          }
+        ],
+        "condition": "return model.showIcon === true;"
+      },
+      {
+        "id": "iconColorMode",
+        "name": "Color del icono",
+        "type": "select",
+        "group": "01. Apariencia",
+        "default": "bar",
+        "items": [
+          {
+            "value": "bar",
+            "label": "Igual al color de la barra"
+          },
+          {
+            "value": "custom",
+            "label": "Color personalizado"
+          }
+        ],
+        "condition": "return model.showIcon === true;"
+      },
+      {
+        "id": "iconColor",
+        "name": "Color personalizado del icono",
+        "type": "color",
+        "group": "01. Apariencia",
+        "default": "#F2C300",
+        "condition": "return model.showIcon === true && model.iconColorMode === 'custom';"
+      },
+      {
+        "id": "showLabel",
+        "name": "Mostrar etiqueta sobre el valor",
+        "type": "switch",
+        "group": "01. Apariencia",
+        "default": true
+      },
+      {
+        "id": "valueLabel",
+        "name": "Texto de la etiqueta",
+        "type": "text",
+        "group": "01. Apariencia",
+        "default": "VALOR ACTUAL",
+        "condition": "return model.showLabel !== false;"
+      },
+      {
+        "id": "valueKey",
+        "name": "Clave del valor (vacío = primera clave de datos)",
+        "type": "text",
+        "group": "02. Valor principal",
+        "default": ""
+      },
+      {
+        "id": "unit",
+        "name": "Unidad del valor (opcional)",
+        "type": "text",
+        "group": "02. Valor principal",
+        "default": "L"
+      },
+      {
+        "id": "unitSize",
+        "name": "Tamaño de la unidad (% del tamaño del número)",
+        "type": "number",
+        "group": "02. Valor principal",
+        "default": 38,
+        "min": 10,
+        "max": 100
+      },
+      {
+        "id": "decimals",
+        "name": "Decimales",
+        "type": "number",
+        "group": "02. Valor principal",
+        "default": 0,
+        "min": 0,
+        "max": 4
+      },
+      {
+        "id": "numberFormat",
+        "name": "Formato de números",
+        "type": "select",
+        "group": "02. Valor principal",
+        "default": "en",
+        "items": [
+          {
+            "value": "en",
+            "label": "1,234.5 (coma de miles)"
+          },
+          {
+            "value": "es",
+            "label": "1.234,5 (punto de miles)"
+          },
+          {
+            "value": "none",
+            "label": "1234.5 (sin separador)"
+          }
+        ]
+      },
+      {
+        "id": "valueUsesBarColor",
+        "name": "Usar el color de la barra en el valor",
+        "type": "switch",
+        "group": "02. Valor principal",
+        "default": false
+      },
+      {
+        "id": "referenceSource",
+        "name": "Origen del valor máximo",
+        "type": "select",
+        "group": "03. Máximo y comparación",
+        "default": "manual",
+        "items": [
+          {
+            "value": "manual",
+            "label": "Valor escrito manualmente"
+          },
+          {
+            "value": "datakey",
+            "label": "Clave de datos (telemetría / atributo)"
+          }
+        ]
+      },
+      {
+        "id": "referenceManual",
+        "name": "Valor máximo (manual)",
+        "type": "number",
+        "group": "03. Máximo y comparación",
+        "default": 10000,
+        "condition": "return model.referenceSource !== 'datakey';"
+      },
+      {
+        "id": "referenceKey",
+        "name": "Clave del valor máximo (vacío = segunda clave de datos)",
+        "type": "text",
+        "group": "03. Máximo y comparación",
+        "default": "",
+        "condition": "return model.referenceSource === 'datakey';"
+      },
+      {
+        "id": "referenceSameUnit",
+        "name": "Usar la misma unidad en el máximo",
+        "type": "switch",
+        "group": "03. Máximo y comparación",
+        "default": true
+      },
+      {
+        "id": "referenceUnit",
+        "name": "Unidad del valor máximo",
+        "type": "text",
+        "group": "03. Máximo y comparación",
+        "default": "",
+        "condition": "return model.referenceSameUnit === false;"
+      },
+      {
+        "id": "clampPercent",
+        "name": "Limitar el porcentaje mostrado a 100 %",
+        "type": "switch",
+        "group": "03. Máximo y comparación",
+        "default": true
+      },
+      {
+        "id": "percentDecimals",
+        "name": "Decimales del porcentaje",
+        "type": "number",
+        "group": "03. Máximo y comparación",
+        "default": 0,
+        "min": 0,
+        "max": 3
+      },
+      {
+        "id": "showBar",
+        "name": "Mostrar barra de porcentaje",
+        "type": "switch",
+        "group": "04. Barra",
+        "default": true
+      },
+      {
+        "id": "barColor",
+        "name": "Color de la barra",
+        "type": "color",
+        "group": "04. Barra",
+        "default": "#F2C300",
+        "condition": "return true;"
+      },
+      {
+        "id": "trackOpacity",
+        "name": "Intensidad del fondo de la barra (0.05 a 0.6)",
+        "type": "number",
+        "group": "04. Barra",
+        "default": 0.22,
+        "min": 0.05,
+        "max": 0.6,
+        "condition": "return model.showBar !== false;"
+      },
+      {
+        "id": "barThickness",
+        "name": "Grosor de la barra",
+        "type": "select",
+        "group": "04. Barra",
+        "default": "normal",
+        "items": [
+          {
+            "value": "thin",
+            "label": "Delgada"
+          },
+          {
+            "value": "normal",
+            "label": "Normal"
+          },
+          {
+            "value": "thick",
+            "label": "Gruesa"
+          }
+        ],
+        "condition": "return model.showBar !== false;"
+      },
+      {
+        "id": "showPercentBadge",
+        "name": "Mostrar porcentaje junto al valor",
+        "type": "switch",
+        "group": "04. Barra",
+        "default": true
+      },
+      {
+        "id": "showSummary",
+        "name": "Mostrar texto resumen",
+        "type": "switch",
+        "group": "05. Texto resumen",
+        "default": true
+      },
+      {
+        "id": "summaryConnector",
+        "name": "Conector entre ambos valores",
+        "type": "text",
+        "group": "05. Texto resumen",
+        "default": "de",
+        "condition": "return model.showSummary !== false;"
+      },
+      {
+        "id": "summaryText",
+        "name": "Texto después del porcentaje",
+        "type": "text",
+        "group": "05. Texto resumen",
+        "default": "de la capacidad",
+        "condition": "return model.showSummary !== false;"
+      },
+      {
+        "id": "noDataText",
+        "name": "Texto cuando no hay datos",
+        "type": "text",
+        "group": "05. Texto resumen",
+        "default": "Sin datos"
+      }
+    ],
+    "dataKeySettingsForm": [],
+    "defaultConfig": "{\"datasources\": [{\"type\": \"function\", \"name\": \"function\", \"dataKeys\": [{\"name\": \"f(x)\", \"type\": \"function\", \"label\": \"valor\", \"color\": \"#f2c300\", \"settings\": {}, \"funcBody\": \"var value = (prevValue || 7200) + Math.floor(Math.random() * 300) - 150;\\nif (value < 0) value = 0;\\nif (value > 10000) value = 10000;\\nreturn value;\"}]}], \"showTitle\": false, \"padding\": \"0px\", \"margin\": \"0px\", \"borderRadius\": \"12px\", \"backgroundColor\": \"rgba(0,0,0,0)\", \"dropShadow\": false, \"widgetStyle\": {\"background\": \"transparent\", \"overflow\": \"hidden\"}, \"settings\": {\"theme\": \"industrial\", \"cardBackground\": \"theme\", \"clearNativeBg\": true, \"title\": \"Capacidad utilizada\", \"showHeader\": true, \"paddingTop\": 6, \"paddingX\": 10, \"paddingY\": 3, \"showTitle\": true, \"showIcon\": true, \"icon\": \"insights\", \"iconStyle\": \"tile\", \"iconColorMode\": \"bar\", \"iconColor\": \"#F2C300\", \"showLabel\": true, \"valueLabel\": \"VALOR ACTUAL\", \"valueKey\": \"\", \"unit\": \"L\", \"unitSize\": 38, \"decimals\": 0, \"numberFormat\": \"en\", \"valueUsesBarColor\": false, \"referenceSource\": \"manual\", \"referenceManual\": 10000, \"referenceKey\": \"\", \"referenceSameUnit\": true, \"referenceUnit\": \"\", \"clampPercent\": true, \"percentDecimals\": 0, \"showBar\": true, \"barColor\": \"#F2C300\", \"trackOpacity\": 0.22, \"barThickness\": \"normal\", \"showPercentBadge\": true, \"showSummary\": true, \"summaryConnector\": \"de\", \"summaryText\": \"de la capacidad\", \"noDataText\": \"Sin datos\"}}"
+  },
+  "resources": [],
+  "scada": false,
+  "tags": [
+    "smelpro",
+    "kpi",
+    "card",
+    "percentage",
+    "progress",
+    "industrial",
+    "thingsboard-ce"
+  ]
+}
