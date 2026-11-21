@@ -1,0 +1,110 @@
+{
+  "fqn": "my_widgets.barraSuperior",
+  "name": "my widgets barraSuperior",
+  "deprecated": false,
+  "image": null,
+  "description": "Barra de navegación superior compacta estilo pestañas con texto de estado general y resaltado de sub-estados.",
+  "descriptor": {
+    "type": "static",
+    "sizeX": 12,
+    "sizeY": 1.2,
+    "resources": [],
+    "templateHtml": "<div class=\"smelpro-topbar\" *ngIf=\"cfg\" [class.tb-style-2]=\"uiStyle === '2'\" [class.tb-style-1]=\"uiStyle !== '2'\" [attr.data-theme]=\"uiStyle\" [style.--tb-accent]=\"accentColor\">\n  <div class=\"tb-bar-inner\" [class.is-right]=\"generalSide === 'right'\">\n    <ng-container *ngIf=\"generalText\">\n      <span class=\"tb-general-state\" [style.color]=\"accentColor\" [title]=\"generalText\">{{generalText}}</span>\n      <span class=\"tb-divider\" [style.color]=\"accentColor\" aria-hidden=\"true\">›</span>\n    </ng-container>\n    <nav class=\"tb-nav-list\" role=\"tablist\" aria-label=\"Navegación superior\">\n      <button *ngFor=\"let item of items\" type=\"button\" role=\"tab\" class=\"tb-tab\" [class.active]=\"isActive(item)\" [attr.aria-selected]=\"isActive(item)\" [title]=\"item.name\" (click)=\"navigate(item)\">\n        <span class=\"tb-label\">{{item.name}}</span>\n        <span class=\"tb-indicator\" [style.background]=\"accentColor\"></span>\n      </button>\n    </nav>\n  </div>\n</div>",
+    "templateCss": ":host {\n  display: block;\n  width: 100%;\n  height: 100%;\n  min-height: 0;\n  overflow: hidden;\n  background: transparent !important;\n}\n* { box-sizing: border-box; }\n\n/* ===== ESTILO 1 (Claro con paleta azul corporativa SMELPRO) ===== */\n.smelpro-topbar,\n.smelpro-topbar.tb-style-1 {\n  --tb-accent: #168EAD;\n  --tb-primary: #104C67;\n  --tb-text: #4B6B7C;\n  --tb-hover-bg: rgba(22, 142, 173, 0.08);\n  position: relative;\n  width: 100%;\n  height: 100%;\n  min-height: 42px;\n  padding: 0 12px;\n  background: transparent !important;\n  border-radius: inherit;\n  font-family: Roboto, Arial, sans-serif;\n  display: flex;\n  align-items: stretch;\n  overflow: hidden;\n}\n\n/* ===== ESTILO 2 (Oscuro) ===== */\n.smelpro-topbar.tb-style-2,\n.smelpro-topbar[data-theme=\"2\"] {\n  --tb-accent: #F2B705;\n  --tb-primary: #FFFFFF;\n  --tb-text: #B4B6BC;\n  --tb-hover-bg: rgba(255, 255, 255, 0.06);\n  background: transparent !important;\n}\n\n.tb-bar-inner {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  width: 100%;\n  height: 100%;\n  overflow: hidden;\n}\n\n.tb-bar-inner.is-right {\n  flex-direction: row-reverse;\n}\n\n.tb-general-state {\n  flex: 0 0 auto;\n  color: var(--tb-accent, #168EAD);\n  font-size: 14.5px;\n  font-weight: 600;\n  letter-spacing: 0.2px;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  padding: 0 2px;\n  line-height: 1.2;\n}\n\n.smelpro-topbar.tb-style-2 .tb-general-state,\n.smelpro-topbar[data-theme=\"2\"] .tb-general-state {\n  color: var(--tb-accent, #F2B705);\n}\n\n.tb-divider {\n  flex: 0 0 auto;\n  color: var(--tb-accent, #168EAD);\n  font-size: 16px;\n  font-weight: 600;\n  line-height: 1;\n  user-select: none;\n  padding: 0 2px;\n}\n\n.smelpro-topbar.tb-style-2 .tb-divider,\n.smelpro-topbar[data-theme=\"2\"] .tb-divider {\n  color: var(--tb-accent, #F2B705);\n}\n\n.tb-bar-inner.is-right .tb-divider {\n  transform: scaleX(-1);\n}\n\n.tb-nav-list {\n  display: flex;\n  align-items: stretch;\n  gap: 2px;\n  flex: 1 1 auto;\n  min-width: 0;\n  height: 100%;\n  overflow-x: auto;\n  overflow-y: hidden;\n  scrollbar-width: none;\n}\n.tb-nav-list::-webkit-scrollbar { display: none; }\n\n.tb-bar-inner.is-right .tb-nav-list {\n  justify-content: flex-start;\n}\n\n.tb-tab {\n  appearance: none;\n  -webkit-appearance: none;\n  border: 0;\n  background: transparent !important;\n  position: relative;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  padding: 0 14px;\n  height: 100%;\n  color: var(--tb-text, #4B6B7C);\n  font-family: inherit;\n  font-size: 13px;\n  font-weight: 400;\n  white-space: nowrap;\n  cursor: pointer;\n  transition: color 160ms ease, background-color 160ms ease;\n  flex: 0 0 auto;\n}\n\n.smelpro-topbar.tb-style-2 .tb-tab,\n.smelpro-topbar[data-theme=\"2\"] .tb-tab {\n  color: #B4B6BC;\n}\n\n.tb-tab:hover {\n  color: var(--tb-primary, #104C67);\n  background-color: var(--tb-hover-bg) !important;\n}\n\n.smelpro-topbar.tb-style-2 .tb-tab:hover,\n.smelpro-topbar[data-theme=\"2\"] .tb-tab:hover {\n  color: #FFFFFF;\n  background-color: rgba(255, 255, 255, 0.06) !important;\n}\n\n.tb-tab:focus-visible {\n  outline: 2px solid var(--tb-accent);\n  outline-offset: -2px;\n  border-radius: 6px;\n}\n\n.tb-tab.active {\n  color: var(--tb-primary, #104C67);\n  font-weight: 600;\n}\n\n.smelpro-topbar.tb-style-2 .tb-tab.active,\n.smelpro-topbar[data-theme=\"2\"] .tb-tab.active {\n  color: #FFFFFF;\n  font-weight: 600;\n}\n\n.tb-indicator {\n  position: absolute;\n  left: 8px;\n  right: 8px;\n  bottom: 0;\n  height: 3px;\n  border-radius: 3px 3px 0 0;\n  background: var(--tb-accent, #168EAD);\n  transform: scaleX(0);\n  opacity: 0;\n  transition: transform 200ms cubic-bezier(.2,.75,.3,1), opacity 160ms ease;\n}\n\n.tb-tab.active .tb-indicator {\n  transform: scaleX(1);\n  opacity: 1;\n}\n\n@media(prefers-reduced-motion:reduce) {\n  .tb-tab, .tb-indicator { transition: none !important; }\n}",
+    "controllerScript": "/* SMELPRO - Barra de navegación superior compacta */\nvar tbNav = { timer: null, dead: false, lastState: null };\n\nfunction tbCtrl() {\n  return self.ctx.stateController || (self.ctx.$scope && self.ctx.$scope.ctx && self.ctx.$scope.ctx.stateController);\n}\n\nfunction tbState() {\n  try {\n    var c = tbCtrl();\n    return c && c.getStateId ? String(c.getStateId() || 'default') : 'default';\n  } catch (e) {\n    return 'default';\n  }\n}\n\nfunction tbText(v) {\n  return v === null || v === undefined ? '' : String(v).trim();\n}\n\nfunction tbSyncConfig() {\n  var s = self.ctx.$scope;\n  if (!s) return;\n  var cfg = self.ctx.settings || {};\n  var rawStyle = String(cfg.uiStyle !== undefined ? cfg.uiStyle : '1').trim().toLowerCase();\n  var uiStyle = (rawStyle === '2' || rawStyle === 'dark' || rawStyle === 'oscuro') ? '2' : '1';\n  var customAccent = tbText(cfg.accentColor);\n  var accentColor = customAccent || (uiStyle === '2' ? '#F2B705' : '#168EAD');\n\n  s.cfg = cfg;\n  s.uiStyle = uiStyle;\n  s.accentColor = accentColor;\n  s.generalText = tbText(cfg.generalStateLabel);\n  s.generalSide = tbText(cfg.generalStateSide) === 'right' ? 'right' : 'left';\n  s.items = (Array.isArray(cfg.navItems) ? cfg.navItems : []).filter(function(x) {\n    return x && tbText(x.name);\n  });\n}\n\nfunction tbUpdate() {\n  if (tbNav.dead) return;\n  var scope = self.ctx.$scope;\n  if (!scope) return;\n  tbSyncConfig();\n  var state = tbState();\n  scope.currentState = state;\n  tbNav.lastState = state;\n  if (self.ctx.detectChanges) self.ctx.detectChanges();\n}\n\nself.onInit = function() {\n  tbNav.dead = false;\n  var s = self.ctx.$scope;\n  if (!s) return;\n\n  tbSyncConfig();\n  s.currentState = tbState();\n  tbNav.lastState = s.currentState;\n\n  s.isActive = function(item) {\n    var state = s.currentState;\n    var targetId = tbText(item.stateId);\n    return !!targetId && targetId === state;\n  };\n\n  s.navigate = function(item) {\n    var id = tbText(item.stateId);\n    var ctrl = tbCtrl();\n    if (!id || !ctrl) return;\n    try {\n      if (typeof ctrl.updateState === 'function') ctrl.updateState(id, {}, false);\n      else if (typeof ctrl.openState === 'function') ctrl.openState(id, {}, false);\n      tbUpdate();\n    } catch (e) {\n      console.warn('[SMELPRO Topbar] No se pudo abrir estado:', id, e);\n      if (self.ctx.showErrorToast) self.ctx.showErrorToast('Estado no disponible: ' + id);\n    }\n  };\n\n  if (self.ctx.detectChanges) self.ctx.detectChanges();\n\n  tbNav.timer = setInterval(function() {\n    if (tbState() !== tbNav.lastState) tbUpdate();\n  }, 600);\n};\n\nself.onDashboardStateChanged = function() {\n  tbUpdate();\n};\n\nself.onDataUpdated = function() {\n  tbUpdate();\n};\n\nself.onDestroy = function() {\n  tbNav.dead = true;\n  clearInterval(tbNav.timer);\n};\n\nself.typeParameters = function() {\n  return {\n    datasourcesOptional: true,\n    dataKeysOptional: true,\n    previewWidth: '800px',\n    previewHeight: '52px'\n  };\n};",
+    "settingsForm": [
+      {
+        "id": "uiStyle",
+        "name": "Tema de la barra",
+        "type": "select",
+        "default": "1",
+        "group": "01. Apariencia",
+        "items": [
+          {
+            "value": "1",
+            "label": "Claro (Azul corporativo)"
+          },
+          {
+            "value": "2",
+            "label": "Oscuro"
+          }
+        ]
+      },
+      {
+        "id": "accentColor",
+        "name": "Color de resaltado",
+        "type": "color",
+        "default": "#168EAD",
+        "group": "01. Apariencia"
+      },
+      {
+        "id": "generalStateLabel",
+        "name": "Estado general",
+        "type": "text",
+        "default": "",
+        "group": "02. Pestañas y estados",
+        "hint": "Texto descriptivo del estado padre/general (solo texto, sin navegación)."
+      },
+      {
+        "id": "generalStateSide",
+        "name": "Ubicación del Estado general",
+        "type": "select",
+        "default": "left",
+        "group": "02. Pestañas y estados",
+        "items": [
+          {
+            "value": "left",
+            "label": "Izquierda"
+          },
+          {
+            "value": "right",
+            "label": "Derecha"
+          }
+        ]
+      },
+      {
+        "id": "navItems",
+        "name": "Pestañas de navegación",
+        "type": "array",
+        "default": [
+          {
+            "name": "Resumen",
+            "stateId": "default"
+          },
+          {
+            "name": "Historial",
+            "stateId": "historial"
+          }
+        ],
+        "group": "02. Pestañas y estados",
+        "arrayItemType": "fieldset",
+        "properties": [
+          {
+            "id": "name",
+            "name": "Nombre de la pestaña",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": "stateId",
+            "name": "ID del estado destino",
+            "type": "text",
+            "required": true,
+            "hint": "ID exacto del estado en el dashboard (ej. default, telemetria, alarmas)"
+          }
+        ]
+      }
+    ],
+    "dataKeySettingsForm": [],
+    "defaultConfig": "{\"datasources\":[],\"showTitle\":false,\"padding\":\"0px\",\"margin\":\"0px\",\"dropShadow\":false,\"backgroundColor\":\"transparent\",\"widgetStyle\":{\"background\":\"transparent\",\"backgroundColor\":\"transparent\",\"overflow\":\"hidden\"},\"settings\":{\"uiStyle\":\"1\",\"accentColor\":\"#168EAD\",\"generalStateLabel\":\"\",\"generalStateSide\":\"left\",\"navItems\":[{\"name\":\"Resumen\",\"stateId\":\"default\"},{\"name\":\"Dispositivos\",\"stateId\":\"dispositivos\"}]},\"title\":\"SMELPRO Barra Superior\"}"
+  },
+  "resources": [],
+  "scada": false,
+  "tags": [
+    "smelpro",
+    "topbar",
+    "tabs",
+    "navigation",
+    "states"
+  ]
+}

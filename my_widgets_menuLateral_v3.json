@@ -1,0 +1,297 @@
+{
+  "fqn": "my_widgets.menuLateral",
+  "name": " my widgets menuLateral",
+  "deprecated": false,
+  "image": null,
+  "description": "Menú lateral con iconos Material / SVG ThingsBoard. Sin insignias ni opción de visibilidad; permite indicar estados adicionales que resaltan cada opción.",
+  "descriptor": {
+    "type": "static",
+    "sizeX": 2.5,
+    "sizeY": 10,
+    "resources": [],
+    "templateHtml": "<div class=\"smelpro-sidebar\" *ngIf=\"cfg\" [class.no-brand]=\"!brandOn\" [class.sw-style-2]=\"uiStyle === '2'\" [style.--sw-accent]=\"accentColor\" [style.--sw-icon]=\"cfg.menuIconColor || '#C8E4F1'\">\n  <div class=\"sidebar-glow sidebar-glow-top\"></div><div class=\"sidebar-glow sidebar-glow-bottom\"></div>\n  <div *ngIf=\"brandOn\" class=\"brand-card\">\n    <img *ngIf=\"cfg.logoUrl\" class=\"brand-logo\" [src]=\"cfg.logoUrl\" [alt]=\"cfg.brandTitle || 'Logo'\" [style.width.px]=\"cfg.logoSize || 42\" [style.height.px]=\"cfg.logoSize || 42\" [style.flex-basis.px]=\"cfg.logoSize || 42\" [style.border-radius.px]=\"cfg.logoRadius || 0\" (error)=\"logoError($event)\" />\n    <div *ngIf=\"cfg.brandTitle || cfg.brandSubtitle\" class=\"brand-text\"><div *ngIf=\"cfg.brandTitle\" class=\"brand-title\">{{cfg.brandTitle}}</div><div *ngIf=\"cfg.brandSubtitle\" class=\"brand-subtitle\">{{cfg.brandSubtitle}}</div></div>\n  </div>\n  <nav class=\"menu\" aria-label=\"Navegación de estados\">\n    <ng-container *ngFor=\"let entry of entries; let i=index\">\n      <div *ngIf=\"entry.type === 'section'\" class=\"sw-section\"><div class=\"sw-section-line\"></div><div class=\"sw-section-label\">{{entry.name}}</div></div>\n      <div *ngIf=\"entry.type !== 'section'\" class=\"sw-parent\">\n        <div class=\"sw-nav\" [class.active]=\"isActive(entry)\" [class.active-child]=\"hasActiveChild(entry)\">\n          <button type=\"button\" class=\"sw-nav-main\" [title]=\"entry.name\" (click)=\"onParent(entry,i,$event)\">\n            <mat-icon *ngIf=\"isSvgIcon(entry.icon)\" class=\"sw-icon\" [svgIcon]=\"iconValue(entry.icon)\"></mat-icon>\n            <mat-icon *ngIf=\"!isSvgIcon(entry.icon)\" class=\"sw-icon\">{{iconValue(entry.icon)}}</mat-icon>\n            <span class=\"sw-label\">{{entry.name}}</span>\n          </button>\n          <button *ngIf=\"visibleChildren(entry).length\" type=\"button\" class=\"sw-toggle\" [attr.aria-label]=\"'Desplegar '+entry.name\" [attr.aria-expanded]=\"isExpanded(i)\" (click)=\"toggle(entry,i,$event)\"><span class=\"sw-chevron\"></span></button>\n        </div>\n        <div *ngIf=\"cfg.submenuMode !== 'flyout' && visibleChildren(entry).length\" class=\"sw-inline\" [hidden]=\"!isExpanded(i)\">\n          <div *ngFor=\"let child of visibleChildren(entry)\" class=\"sw-nav child\" [class.active]=\"isActive(child)\">\n            <button type=\"button\" class=\"sw-nav-main\" [title]=\"child.name\" (click)=\"navigate(child)\">\n              <mat-icon *ngIf=\"isSvgIcon(child.icon)\" class=\"sw-icon\" [svgIcon]=\"iconValue(child.icon)\"></mat-icon>\n              <mat-icon *ngIf=\"!isSvgIcon(child.icon)\" class=\"sw-icon\">{{iconValue(child.icon)}}</mat-icon>\n              <span class=\"sw-label\">{{child.name}}</span>\n            </button>\n          </div>\n        </div>\n      </div>\n    </ng-container>\n  </nav>\n  <div *ngIf=\"um && um.enabled\" class=\"um-footer\">\n    <div *ngIf=\"um.label\" class=\"sw-section um-section\"><div class=\"sw-section-line\"></div><div class=\"sw-section-label\">{{um.label}}</div></div>\n    <div class=\"um-card\">\n      <div class=\"um-avatar\" [class.has-img]=\"um.avatarUrl && !um.avatarFailed\">\n        <img *ngIf=\"um.avatarUrl && !um.avatarFailed\" class=\"um-avatar-img\" [src]=\"um.avatarUrl\" alt=\"\" (error)=\"um.avatarFailed=true\" />\n        <mat-icon *ngIf=\"!um.avatarUrl || um.avatarFailed\" class=\"um-avatar-icon\">account_circle</mat-icon>\n      </div>\n      <div class=\"um-info\">\n        <div class=\"um-name\" [title]=\"um.name\">{{um.name}}</div>\n        <div *ngIf=\"um.email && um.email !== um.name\" class=\"um-email\" [title]=\"um.email\">{{um.email}}</div>\n        <div class=\"um-role\" [title]=\"um.role\">{{um.role || '...'}}</div>\n      </div>\n    </div>\n    <div class=\"sw-nav um-logout\" [class.confirm]=\"um.confirm\">\n      <button type=\"button\" class=\"sw-nav-main\" [title]=\"um.logoutText\" (click)=\"logout()\">\n        <mat-icon class=\"sw-icon\">logout</mat-icon>\n        <span class=\"sw-label\">{{um.confirm ? um.confirmText : um.logoutText}}</span>\n      </button>\n    </div>\n  </div>\n  <div *ngIf=\"flyoutEntry\" class=\"sw-flyout-native\" [class.sw-style-2]=\"uiStyle === '2'\" [ngStyle]=\"flyoutStyle\" role=\"dialog\" [attr.aria-label]=\"'Submenú de '+flyoutEntry.name\" (click)=\"$event.stopPropagation()\">\n    <div class=\"sw-flyout-title\">{{flyoutEntry.name}}</div>\n    <button *ngFor=\"let child of visibleChildren(flyoutEntry)\" class=\"sw-flyout-row\" [class.active]=\"isActive(child)\" type=\"button\" (click)=\"navigate(child)\">\n      <mat-icon *ngIf=\"isSvgIcon(child.icon)\" class=\"sw-flyout-icon\" [svgIcon]=\"iconValue(child.icon)\"></mat-icon>\n      <mat-icon *ngIf=\"!isSvgIcon(child.icon)\" class=\"sw-flyout-icon\">{{iconValue(child.icon)}}</mat-icon>\n      <span>{{child.name}}</span>\n    </button>\n  </div>\n</div>",
+    "templateCss": " :host {display:block;width:100%;height:100%;min-height:0;overflow:hidden;border-radius:0!important}\n*{box-sizing:border-box}\n.smelpro-sidebar{--sw-icon:#C8E4F1;position:relative;width:100%;height:100%;min-height:0;padding:18px;color:#fff;background:linear-gradient(180deg,#104C67 0%,#123D68 100%);overflow:hidden;font-family:Roboto,Arial,sans-serif}\n.sidebar-glow{position:absolute;border-radius:50%;pointer-events:none}.sidebar-glow-top{width:300px;height:220px;left:-80px;top:-50px;background:rgba(44,189,213,.14);filter:blur(45px)}.sidebar-glow-bottom{width:240px;height:220px;right:-70px;bottom:-30px;background:rgba(56,132,208,.15);filter:blur(50px)}\n.brand-card{position:relative;z-index:1;width:100%;min-height:92px;display:flex;align-items:center;gap:14px;padding:16px;background:rgba(12,68,99,.9);border:1px solid #286B89;border-radius:22px}.brand-logo{width:42px;height:42px;flex:0 0 42px;object-fit:contain}.brand-text{min-width:0;display:flex;flex-direction:column;gap:6px}.brand-title{font-size:15px;line-height:18px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand-subtitle{font-size:10px;line-height:12px;color:#BFDBEA;font-weight:500}\n.menu{position:relative;z-index:1;margin-top:22px;max-height:calc(100% - 114px);overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;gap:6px;scrollbar-width:thin;scrollbar-color:#286B89 transparent}.menu::-webkit-scrollbar{width:5px}.menu::-webkit-scrollbar-thumb{background:#286B89;border-radius:8px}\n.sw-section{margin:14px 2px 8px;display:flex;flex-direction:column;gap:7px}.sw-section-line{width:100%;height:1px;background:rgba(168,203,220,.42)}.sw-section-label{padding:0 6px;font-size:10px;line-height:12px;font-weight:600;letter-spacing:.45px;color:#A8CBDC;text-transform:uppercase}\n.sw-nav{position:relative;display:flex;align-items:center;width:100%;height:40px;min-height:40px;border:1px solid #245F83;border-radius:12px;background:rgba(13,63,95,.90);overflow:hidden;transition:transform 180ms cubic-bezier(.2,.75,.3,1),background 180ms,border-color 180ms,box-shadow 180ms}.sw-nav:hover{background:rgba(19,83,122,.96);border-color:rgba(92,205,223,.72);box-shadow:0 6px 16px rgba(5,20,36,.2);transform:translateX(3px)}.sw-nav.active{background:linear-gradient(90deg,#168EAD 0%,#145A89 100%);border-color:#54CBDC;box-shadow:0 3px 10px rgba(5,20,36,.16);font-weight:600}.sw-nav.child{margin-left:8px;width:calc(100% - 8px);background:rgba(13,63,95,.65)}.sw-nav.child.active{background:linear-gradient(90deg,#168EAD,#145A89)}\n.sw-nav-main,.sw-toggle{appearance:none;-webkit-appearance:none;border:0;background:none;color:#fff;font:inherit;cursor:pointer;height:100%;display:flex;align-items:center;position:relative;z-index:1}.sw-nav-main{min-width:0;flex:1 1 auto;gap:10px;padding:0 14px 0 18px;text-align:left;font-size:13px}.sw-nav.child .sw-nav-main{padding-left:22px;font-size:12px}.sw-nav-main:focus-visible,.sw-toggle:focus-visible{outline:2px solid #54CBDC;outline-offset:-2px}.sw-nav-main:disabled{cursor:default;opacity:.85}.sw-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sw-icon{width:17px;height:17px;flex:0 0 17px;font-size:17px;line-height:17px;color:var(--sw-icon);display:inline-flex;align-items:center;justify-content:center}.sw-nav.active .sw-icon{color:#fff}.sw-toggle{flex:0 0 38px;justify-content:center;border-left:1px solid rgba(168,203,220,.25)}.sw-toggle:hover{background:rgba(92,205,223,.15)}.sw-chevron{width:7px;height:7px;border-top:1.7px solid currentColor;border-right:1.7px solid currentColor;transform:rotate(45deg);transition:transform 180ms}.sw-toggle[aria-expanded=true] .sw-chevron{transform:rotate(135deg)}.sw-inline{display:flex;flex-direction:column;gap:6px;padding-top:6px;padding-bottom:2px}.sw-inline[hidden]{display:none!important}\n@media(max-width:230px){.smelpro-sidebar{padding:12px}.brand-card{padding:12px}.brand-title{font-size:13px}.sw-nav-main{padding-left:12px;gap:7px}.sw-nav.child .sw-nav-main{padding-left:16px}}@media(prefers-reduced-motion:reduce){.sw-nav,.sw-chevron{transition:none!important}}\n\n/* Correcciones de contenedor: scroll continuo de todos los menús */\n.smelpro-sidebar{display:flex;flex-direction:column;min-height:0;overflow:hidden}\n.brand-card{flex:0 0 auto}\n.menu{flex:1 1 auto;min-height:0;max-height:none;overflow-y:auto;overflow-x:hidden;padding-right:5px;padding-bottom:16px;overscroll-behavior:contain}\n.sw-parent,.sw-section{flex:0 0 auto;min-width:0}\n.sw-nav-main{overflow:hidden}\n.sw-icon{font-family:'Material Icons'!important;font-weight:normal!important;font-style:normal!important;white-space:nowrap;letter-spacing:normal;text-transform:none;direction:ltr;font-feature-settings:'liga';-webkit-font-feature-settings:'liga';-webkit-font-smoothing:antialiased}\n.sw-inline{min-width:0}\n\n/* Los SVG del registro de Angular Material heredan el color del menú */\n.sw-icon, .sw-flyout-icon {font-family:'Material Icons';width:18px!important;height:18px!important;flex:0 0 18px!important;line-height:18px!important;font-size:18px!important;overflow:visible!important;}\n.sw-icon svg,.sw-flyout-icon svg {width:100%;height:100%;display:block;fill:currentColor;}\n.sw-flyout-native {position:fixed;z-index:1200;overflow:auto;padding:10px;background:linear-gradient(180deg,#104C67,#123D68);border:1px solid #286B89;border-radius:18px;box-shadow:0 14px 34px rgba(5,20,36,.30);color:#fff;font:13px Roboto,Arial,sans-serif;scrollbar-width:thin;scrollbar-color:#286B89 transparent;}\n.sw-flyout-title {font-weight:600;font-size:13px;padding:8px 8px 12px;color:#BFDBEA;}\n.sw-flyout-row{width:100%;min-height:39px;display:flex;align-items:center;gap:10px;margin:0 0 5px;padding:9px 10px;color:#fff;cursor:pointer;border:1px solid #245F83;border-radius:10px;background:rgba(13,63,95,.9);font:inherit;text-align:left;}\n.sw-flyout-row:hover{background:rgba(19,83,122,.96);border-color:#54CBDC;}.sw-flyout-row.active{background:linear-gradient(90deg,#168EAD,#145A89);border-color:#54CBDC;}\n.sw-flyout-icon{color:#C8E4F1;}\n\n/* ===== Gestión de usuario (cuenta, rol y cerrar sesión) ===== */\n.um-footer{position:relative;z-index:1;flex:0 0 auto;margin-top:8px;display:flex;flex-direction:column;gap:8px}\n.um-section{margin:6px 2px 0}\n.um-card{display:flex;align-items:center;gap:12px;min-width:0;padding:10px 12px;background:rgba(12,68,99,.9);border:1px solid #286B89;border-radius:16px}\n.um-avatar{flex:0 0 40px;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--sw-icon)}\n.um-avatar.has-img{border:1px solid #54CBDC;background:#0C4463}\n.um-avatar-img{width:100%;height:100%;object-fit:cover;display:block}\n.um-avatar-icon{font-family:'Material Icons'!important;font-weight:normal;font-style:normal;text-transform:none;white-space:nowrap;letter-spacing:normal;font-feature-settings:'liga';-webkit-font-smoothing:antialiased;font-size:40px!important;width:40px!important;height:40px!important;line-height:40px!important;overflow:visible!important;color:var(--sw-icon)}\n.um-info{min-width:0;display:flex;flex-direction:column;gap:3px}\n.um-name{font-size:13px;line-height:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}\n.um-email{font-size:10px;line-height:12px;color:#BFDBEA;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}\n.um-role{align-self:flex-start;max-width:100%;margin-top:3px;padding:2px 9px;border-radius:999px;border:1px solid #54CBDC;background:rgba(84,203,220,.12);color:#DDF8FF;font-size:10px;line-height:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}\n.um-logout:hover{background:rgba(120,30,50,.55);border-color:rgba(242,73,92,.8)}\n.um-logout.confirm{background:linear-gradient(90deg,#B3261E,#7F1D1D);border-color:#F2495C;font-weight:600}\n@media(max-width:230px){.um-card{padding:8px;gap:8px}.um-avatar{flex-basis:34px;width:34px;height:34px}.um-avatar-icon{font-size:34px!important;width:34px!important;height:34px!important;line-height:34px!important}}\n\n/* Sin logo/marca: el menú empieza arriba */\n.smelpro-sidebar.no-brand .menu{margin-top:0}\n.smelpro-sidebar.no-brand .menu>.sw-section:first-child{margin-top:2px}\n\n/* ===== ESTILO 2 (inspirado en Caterpillar / Grafana) ===== */\n.smelpro-sidebar.sw-style-2{padding:0;background:#19191B;border-right:1px solid #2A2B2E;color:#fff}\n.sw-style-2 .sidebar-glow{display:none}\n.sw-style-2 .brand-card{background:transparent;border:0;border-radius:0;min-height:0;padding:22px 20px 14px}\n.sw-style-2 .brand-logo{width:auto!important;max-width:100%;flex:0 1 auto!important;object-fit:contain}\n.sw-style-2 .brand-title{color:#fff;font-size:15px;font-weight:700;letter-spacing:.3px}\n.sw-style-2 .brand-subtitle{color:#9A9BA0}\n.sw-style-2 .menu{margin-top:8px;gap:2px;padding-right:0;padding-bottom:12px;scrollbar-color:#3A3B3E transparent}\n.sw-style-2 .menu::-webkit-scrollbar-thumb{background:#3A3B3E}\n.smelpro-sidebar.sw-style-2.no-brand .menu{margin-top:12px}\n.sw-style-2 .sw-section{margin:18px 0 6px;padding:0 20px;gap:0}\n.sw-style-2 .sw-section-line{display:none}\n.sw-style-2 .sw-section-label{padding:0;color:#7E7F84;letter-spacing:.7px}\n.sw-style-2 .sw-nav{height:44px;min-height:44px;border:0;border-radius:0;background:transparent;box-shadow:none;transform:none;font-weight:500}\n.sw-style-2 .sw-nav:hover{background:#242528;border-color:transparent;box-shadow:none;transform:none}\n.sw-style-2 .sw-nav.active,.sw-style-2 .sw-nav.child.active,.sw-style-2 .sw-nav.active:hover{background:var(--sw-accent,#F2B705);box-shadow:none;font-weight:600}\n.sw-style-2 .sw-nav.active .sw-nav-main,.sw-style-2 .sw-nav.active .sw-toggle,.sw-style-2 .sw-nav.active .sw-icon,.sw-style-2 .sw-nav.child.active .sw-nav-main{color:#111}\n.sw-style-2 .sw-nav.active-child{box-shadow:inset 3px 0 0 var(--sw-accent,#F2B705)}\n.sw-style-2 .sw-nav-main{padding:0 20px;gap:14px;font-size:13px;color:#fff}\n.sw-style-2 .sw-icon{color:#D4D5D8}\n.sw-style-2 .sw-toggle{border-left:0;color:#9A9BA0}\n.sw-style-2 .sw-toggle:hover{background:rgba(255,255,255,.06)}\n.sw-style-2 .sw-inline{gap:2px;padding-top:2px;padding-bottom:4px}\n.sw-style-2 .sw-nav.child{margin-left:0;width:100%;height:38px;min-height:38px;background:transparent}\n.sw-style-2 .sw-nav.child .sw-nav-main{padding-left:54px;font-size:12px;color:#C4C5C8}\n.sw-style-2 .um-footer{margin-top:0;gap:0;border-top:1px solid #2C2D30;padding:10px 0 4px}\n.sw-style-2 .um-section{margin:6px 0 4px;padding:0 20px}\n.sw-style-2 .um-card{background:transparent;border:0;border-radius:0;padding:8px 20px;gap:12px}\n.sw-style-2 .um-avatar{flex-basis:36px;width:36px;height:36px;color:#fff}\n.sw-style-2 .um-avatar.has-img{border:2px solid #fff;background:#fff}\n.sw-style-2 .um-avatar-icon{font-size:36px!important;width:36px!important;height:36px!important;line-height:36px!important;color:#fff}\n.sw-style-2 .um-name{color:#fff;font-size:12.5px;font-weight:600}\n.sw-style-2 .um-email{display:none}\n.sw-style-2 .um-role{background:transparent;border:0;border-radius:0;padding:0;margin-top:1px;color:#9A9BA0;font-size:11px;font-weight:400}\n.sw-style-2 .um-logout:hover{background:#242528;border-color:transparent}\n.sw-style-2 .um-logout.confirm,.sw-style-2 .um-logout.confirm:hover{background:#B3261E}\n.sw-style-2 .um-logout.confirm .sw-nav-main,.sw-style-2 .um-logout.confirm .sw-icon{color:#fff}\n@media(max-width:230px){.sw-style-2 .sw-nav-main{padding-left:14px;padding-right:10px;gap:10px}.sw-style-2 .sw-nav.child .sw-nav-main{padding-left:38px}.sw-style-2 .sw-section,.sw-style-2 .um-card,.sw-style-2 .brand-card{padding-left:14px;padding-right:14px}}\n",
+    "controllerScript": "/* SMELPRO - Sidebar con iconos nativos Material / SVG MDI. */\nvar swNative={timer:null,dead:false,fly:null,cleanup:[]};\nfunction swCtrl(){return self.ctx.stateController || (self.ctx.$scope&&self.ctx.$scope.ctx&&self.ctx.$scope.ctx.stateController);}\nfunction swState(){try{var c=swCtrl();return c&&c.getStateId?String(c.getStateId()||'default'):'default';}catch(e){return 'default';}}\nfunction swText(v){return v===null||v===undefined?'':String(v).trim();}\nfunction swList(v){return swText(v).split(/[,;\\n]/).map(function(x){return x.trim();}).filter(Boolean);}\nfunction swUpdate(){if(swNative.dead)return;var scope=self.ctx.$scope;var state=swState();scope.currentState=state;if(scope.cfg.autoExpandActive!==false&&scope.cfg.submenuMode!=='flyout'&&state!==swNative.lastState){scope.entries.forEach(function(x,i){if(x.type==='section')return;if(scope.visibleChildren(x).some(function(child){return scope.isActive(child);})){scope.expanded['entry'+i]=true;}});}swNative.lastState=state;if(self.ctx.detectChanges)self.ctx.detectChanges();}\nfunction swListen(target,event,handler,options){target.addEventListener(event,handler,options);swNative.cleanup.push(function(){target.removeEventListener(event,handler,options);});}\nfunction swClose(){var s=self.ctx.$scope;if(!s)return;s.flyoutEntry=null;swNative.fly=null;swUpdate();}\nfunction swPosition(){var s=self.ctx.$scope;if(!s||!s.flyoutEntry||!swNative.fly)return;var r=swNative.fly.getBoundingClientRect();var vw=window.innerWidth,vh=window.innerHeight;var width=Math.min(Math.max(200,Number(s.cfg.flyoutWidth)||248),vw-16);var height=Math.min(Math.max(200,Number(s.cfg.flyoutHeight)||420),vh-16);var left=r.right+8;if(left+width>vw-8)left=Math.max(8,r.left-width-8);s.flyoutStyle={left:left+'px',top:Math.max(8,Math.min(r.top,vh-height-8))+'px',width:width+'px',maxHeight:height+'px'};if(self.ctx.detectChanges)self.ctx.detectChanges();}\nself.onInit=function(){swNative.dead=false;var s=self.ctx.$scope;if(!s)return;s.cfg=self.ctx.settings||{};s.entries=(Array.isArray(s.cfg.menuItems)?s.cfg.menuItems:[]).filter(function(x){return x&&swText(x.name);});s.currentState=swState();s.expanded={};s.flyoutEntry=null;s.flyoutStyle={};s.isSvgIcon=function(value){var v=swText(value);return v.indexOf(':')!==-1&&!/^(material-icons|material|mat):/i.test(v);};s.iconValue=function(value){var v=swText(value);if(/^(material-icons|material|mat):/i.test(v))v=v.substring(v.indexOf(':')+1);return v||'dashboard';};s.visibleChildren=function(entry){return(Array.isArray(entry.subItems)?entry.subItems:[]).filter(function(x){return x&&swText(x.name);});};s.isActive=function(entry){var state=s.currentState;return swText(entry.stateId)===state&&!!swText(entry.stateId)||swList(entry.activeStates).indexOf(state)>=0;};s.hasActiveChild=function(entry){return s.visibleChildren(entry).some(s.isActive);};s.isExpanded=function(i){return s.cfg.submenuMode==='flyout'?!!(s.flyoutEntry&&s.flyoutIndex===i):!!s.expanded['entry'+i];};s.navigate=function(entry){var id=swText(entry.stateId),ctrl=swCtrl();if(!id||!ctrl)return;try{if(typeof ctrl.updateState==='function')ctrl.updateState(id,{},false);else if(typeof ctrl.openState==='function')ctrl.openState(id,{},false);swClose();swUpdate();}catch(e){console.warn('[SMELPRO] No se pudo abrir estado',id,e);if(self.ctx.showErrorToast)self.ctx.showErrorToast('Estado no disponible: '+id);}};\ns.toggle=function(entry,i,event,force){if(s.cfg.submenuMode==='flyout'){if(!force&&s.flyoutEntry&&s.flyoutIndex===i){swClose();return;}s.flyoutEntry=entry;s.flyoutIndex=i;swNative.fly=event.currentTarget.closest('.sw-nav');swPosition();setTimeout(function(){var el=self.ctx.$container[0].querySelector('.sw-flyout-native');if(el&&el.parentNode!==document.body)document.body.appendChild(el);if(el&&el.style&&s.accentColor)el.style.setProperty('--sw-accent',s.accentColor);},0);return;}s.expanded['entry'+i]=force?true:!s.expanded['entry'+i];swUpdate();};\ns.onParent=function(entry,i,event){var action=swText(entry.parentAction)||'expand';if(!s.visibleChildren(entry).length){s.navigate(entry);return;}if(action==='navigate'){s.navigate(entry);return;}if(action==='navigateAndExpand'){s.toggle(entry,i,event,true);s.navigate(entry);return;}s.toggle(entry,i,event);};s.logoError=function(event){event.target.style.display='none';};\ns.entries.forEach(function(x,i){if(x.type!=='section'&&s.visibleChildren(x).some(s.isActive)&&s.cfg.autoExpandActive!==false)s.expanded['entry'+i]=true;});swNative.lastState=s.currentState;\n/* --- Logo/marca opcional --- */\ns.uiStyle=String(s.cfg.uiStyle)==='2'?'2':'1';\ns.accentColor=swText(s.cfg.style2Accent)||'#F2B705';\ns.brandOn=s.cfg.brandEnabled===true&&!!(swText(s.cfg.logoUrl)||swText(s.cfg.brandTitle)||swText(s.cfg.brandSubtitle));\n/* --- Gestión de usuario: cuenta, rol, avatar y cerrar sesión --- */\n(function(){\nvar cu=self.ctx.currentUser||{};\nvar authLabels={TENANT_ADMIN:'Administrador del tenant',CUSTOMER_USER:'Usuario de cliente',SYS_ADMIN:'Administrador del sistema'};\nvar um=s.um={enabled:s.cfg.userMgmtEnabled===true,label:swText(s.cfg.userMgmtLabel),logoutText:swText(s.cfg.userMgmtLogoutText)||'Cerrar sesión',confirmText:'Confirmar',confirm:false,name:'',email:'',role:authLabels[cu.authority]||swText(cu.authority),avatarUrl:'',avatarFailed:false};\nswNative.objUrls=swNative.objUrls||[];\nfunction setUser(email,first,last){um.email=swText(email)||um.email;var full=[swText(first),swText(last)].filter(Boolean).join(' ');um.name=full||um.email||'Usuario';}\nsetUser(cu.sub||cu.email,cu.firstName,cu.lastName);\nfunction refreshUm(){if(!swNative.dead&&self.ctx.detectChanges)self.ctx.detectChanges();}\n\n/* ----- búsqueda del avatar del usuario (si no hay, se muestra el avatar por defecto de ThingsBoard) ----- */\nvar avatarKey=swText(s.cfg.userMgmtAvatarAttribute);\nvar IMG_KEYS=[avatarKey,'avatar','avatarUrl','avatarImage','avatarImg','image','imageUrl','img','photo','photoUrl','picture','profileImage','profilePicture','profileImageUrl','thumbnail'].filter(Boolean);\nvar STRICT=/^(data:image\\/|tb-image;|https?:\\/\\/\\S+\\.(png|jpe?g|gif|webp|svg|bmp)(\\?\\S*)?$|\\/api\\/images\\/)/i;\nvar LOOSE=/^(data:image\\/|tb-image;|https?:\\/\\/|\\/)/i;\n// \"tb-image;/api/images/tenant/x.png;data:image/png;base64,...\" -> data URI si existe, si no el enlace\nfunction parseImg(v,rx){if(typeof v!=='string')return '';v=v.trim();if(!v||!rx.test(v))return '';if(v.indexOf('tb-image;')===0){var p=v.split(';');var data=p.slice(2).join(';');return /^data:image\\//i.test(data)?data:(p[1]||'');}return v;}\nfunction scan(obj,depth,out){if(!obj||typeof obj!=='object'||depth>2)return;Object.keys(obj).forEach(function(k){var v=obj[k];if(typeof v==='string'){var u=parseImg(v,STRICT);if(u)out.push(u);}else if(v&&typeof v==='object'){scan(v,depth+1,out);}});}\nfunction findImg(obj){if(!obj||typeof obj!=='object')return '';for(var i=0;i<IMG_KEYS.length;i++){var u=parseImg(obj[IMG_KEYS[i]],LOOSE);if(u)return u;}var out=[];scan(obj,0,out);return out[0]||'';}\nvar bestRank=99;\nfunction offer(rank,url){\n  if(!url||rank>=bestRank)return;\n  bestRank=rank;um.avatarUrl=url;um.avatarFailed=false;um.avatarRaw=url;\n  // imágenes privadas de ThingsBoard (/api/...) necesitan el token: se descargan con la sesión actual\n  if(/^\\/api\\//.test(url)&&!/^\\/api\\/images\\/public\\//.test(url)&&self.ctx.http&&self.ctx.http.get){\n    try{self.ctx.http.get(url,{responseType:'blob'}).subscribe(function(blob){\n      if(swNative.dead||um.avatarRaw!==url||!blob)return;\n      var o=URL.createObjectURL(blob);swNative.objUrls.push(o);um.avatarUrl=o;um.avatarFailed=false;refreshUm();\n    },function(){});}catch(e){}\n  }\n  refreshUm();\n}\n\nif(um.enabled){\n  // 1) usuario completo: nombre, correo y additionalInfo\n  try{if(cu.userId&&self.ctx.userService&&self.ctx.userService.getUser){self.ctx.userService.getUser(cu.userId).subscribe(function(u){\n    if(u){setUser(u.email,u.firstName,u.lastName);offer(2,findImg(u.additionalInfo));offer(3,findImg(u));}\n    refreshUm();\n  },function(){});}}catch(e){}\n  // 2) atributos de servidor del usuario: rol y avatar\n  var roleAttr=swText(s.cfg.userMgmtRoleAttribute)||'role';\n  try{if(cu.userId&&self.ctx.attributeService){self.ctx.attributeService.getEntityAttributes({entityType:'USER',id:cu.userId},'SERVER_SCOPE').subscribe(function(attrs){\n    attrs=attrs||[];\n    var a=attrs.filter(function(x){return x.key===roleAttr;})[0];\n    if(a&&swText(a.value))um.role=swText(a.value);\n    var byKey={};attrs.forEach(function(x){if(x.key!==roleAttr)byKey[x.key]=x.value;});\n    offer(1,findImg(byKey));\n    var out=[];scan(byKey,0,out);offer(4,out[0]||'');\n    refreshUm();\n  },function(e){console.warn('[SMELPRO] No se pudo leer atributos del usuario',e);});}}catch(e){}\n}\ns.logout=function(){\n  if(!um.confirm){um.confirm=true;clearTimeout(swNative.logoutTimer);swNative.logoutTimer=setTimeout(function(){um.confirm=false;refreshUm();},4000);refreshUm();return;}\n  clearTimeout(swNative.logoutTimer);\n  var finish=function(){['jwt_token','refresh_token','jwt_token_expiration','refresh_token_expiration'].forEach(function(k){try{localStorage.removeItem(k);}catch(e){}});window.location.href='/login';};\n  try{var req=self.ctx.http&&self.ctx.http.post('/api/auth/logout',{});if(req&&req.subscribe){req.subscribe(finish,finish);}else{finish();}}catch(e){finish();}\n};\n})();\nswListen(document,'pointerdown',function(event){if(!s.flyoutEntry)return;var f=document.querySelector('.sw-flyout-native');if(f&&f.contains(event.target))return;if(swNative.fly&&swNative.fly.contains(event.target))return;swClose();},true);\nswListen(document,'keydown',function(e){if(e.key==='Escape'&&s.flyoutEntry)swClose();});swListen(window,'resize',swPosition);swListen(window,'scroll',swPosition,true);swNative.style=document.createElement('style');swNative.style.textContent='.sw-flyout-native{position:fixed;z-index:1200;overflow:auto;padding:10px;background:linear-gradient(180deg,#104C67,#123D68);border:1px solid #286B89;border-radius:18px;box-shadow:0 14px 34px rgba(5,20,36,.30);color:#fff;font:13px Roboto,Arial,sans-serif}.sw-flyout-native .sw-flyout-title{font-weight:600;padding:8px 8px 12px;color:#BFDBEA}.sw-flyout-native .sw-flyout-row{width:100%;min-height:39px;display:flex;align-items:center;gap:10px;margin:0 0 5px;padding:9px 10px;color:#fff;cursor:pointer;border:1px solid #245F83;border-radius:10px;background:#104369;font:inherit;text-align:left}.sw-flyout-native .sw-flyout-row.active{background:linear-gradient(90deg,#168EAD,#145A89)}.sw-flyout-native .sw-flyout-icon{display:inline-flex;align-items:center;justify-content:center;width:18px!important;height:18px!important;flex:0 0 18px!important;font-family:Material Icons;font-weight:normal;font-style:normal;font-size:18px!important;line-height:18px!important;letter-spacing:normal;text-transform:none;white-space:nowrap;direction:ltr;font-feature-settings:\"liga\";-webkit-font-smoothing:antialiased;overflow:visible!important;color:#C8E4F1}.sw-flyout-native .sw-flyout-icon svg{width:100%;height:100%;display:block;fill:currentColor}.sw-flyout-native .sw-flyout-row{overflow:visible;padding-right:14px}.sw-flyout-native .sw-flyout-row.active .sw-flyout-icon{color:#fff}.sw-flyout-native.sw-style-2{background:#19191B;border:1px solid #2A2B2E;border-radius:6px;box-shadow:0 14px 34px rgba(0,0,0,.5)}.sw-flyout-native.sw-style-2 .sw-flyout-title{color:#9A9BA0;font-size:11px;letter-spacing:.7px;text-transform:uppercase}.sw-flyout-native.sw-style-2 .sw-flyout-row{background:transparent;border:0;border-radius:4px;color:#fff;cursor:pointer}.sw-flyout-native.sw-style-2 .sw-flyout-row:hover{background:#242528}.sw-flyout-native.sw-style-2 .sw-flyout-row.active{background:var(--sw-accent,#F2B705);color:#111;font-weight:600}.sw-flyout-native.sw-style-2 .sw-flyout-icon{color:#D4D5D8}.sw-flyout-native.sw-style-2 .sw-flyout-row.active .sw-flyout-icon{color:#111}';document.head.appendChild(swNative.style);swNative.timer=setInterval(function(){if(swState()!==swNative.lastState)swUpdate();},800);\n};\nself.onDashboardStateChanged=function(){swClose();swUpdate();};\nself.onResize=swPosition;\nself.onDataUpdated=function(){if(swState()!==swNative.lastState)swUpdate();else if(self.ctx.detectChanges)self.ctx.detectChanges();};\nself.onDestroy=function(){swNative.dead=true;clearInterval(swNative.timer);clearTimeout(swNative.logoutTimer);(swNative.objUrls||[]).forEach(function(u){try{URL.revokeObjectURL(u);}catch(e){}});swNative.cleanup.forEach(function(fn){fn();});swNative.cleanup=[];if(swNative.style)swNative.style.remove();var f=document.querySelector('.sw-flyout-native');if(f&&f.parentNode===document.body)f.remove();};\nself.typeParameters=function(){return{datasourcesOptional:true,dataKeysOptional:true,previewWidth:'248px',previewHeight:'810px'};};",
+    "settingsForm": [
+      {
+        "id": "uiStyle",
+        "name": "Estilo del menú",
+        "type": "select",
+        "default": "1",
+        "group": "01. Estilo",
+        "items": [
+          {
+            "value": "1",
+            "label": "Estilo 1"
+          },
+          {
+            "value": "2",
+            "label": "Estilo 2"
+          }
+        ]
+      },
+      {
+        "id": "style2Accent",
+        "name": "Color de acento (opción activa)",
+        "type": "color",
+        "default": "#F2B705",
+        "group": "01. Estilo",
+        "condition": "return model.uiStyle === '2';"
+      },
+      {
+        "id": "brandEnabled",
+        "name": "Mostrar logo y marca",
+        "type": "switch",
+        "group": "02. Logo y marca",
+        "default": false
+      },
+      {
+        "id": "brandTitle",
+        "name": "Marca",
+        "type": "text",
+        "group": "02. Logo y marca",
+        "condition": "return model.brandEnabled === true;"
+      },
+      {
+        "id": "brandSubtitle",
+        "name": "Subtítulo",
+        "type": "text",
+        "group": "02. Logo y marca",
+        "condition": "return model.brandEnabled === true;"
+      },
+      {
+        "id": "logoUrl",
+        "name": "URL del logo",
+        "type": "text",
+        "group": "02. Logo y marca",
+        "condition": "return model.brandEnabled === true;"
+      },
+      {
+        "id": "logoSize",
+        "name": "Tamaño del logo (px)",
+        "type": "number",
+        "group": "02. Logo y marca",
+        "default": 42,
+        "min": 20,
+        "max": 120,
+        "condition": "return model.brandEnabled === true;"
+      },
+      {
+        "id": "logoRadius",
+        "name": "Radio del logo (px)",
+        "type": "number",
+        "group": "02. Logo y marca",
+        "default": 0,
+        "min": 0,
+        "max": 60,
+        "condition": "return model.brandEnabled === true;"
+      },
+      {
+        "id": "userMgmtEnabled",
+        "name": "Habilitar Gestión de usuario (cuenta, rol y cerrar sesión al final del menú)",
+        "type": "switch",
+        "group": "03. Gestión de usuario",
+        "default": false
+      },
+      {
+        "id": "userMgmtLabel",
+        "name": "Título de la sección (vacío = no se muestra el título)",
+        "type": "text",
+        "group": "03. Gestión de usuario",
+        "condition": "return model.userMgmtEnabled === true;"
+      },
+      {
+        "id": "userMgmtRoleAttribute",
+        "name": "Atributo del usuario que contiene el rol",
+        "type": "text",
+        "group": "03. Gestión de usuario",
+        "default": "role",
+        "condition": "return model.userMgmtEnabled === true;",
+        "hint": "Se lee de los atributos de servidor del usuario actual. Si no existe, se muestra su autoridad en ThingsBoard."
+      },
+      {
+        "id": "userMgmtAvatarAttribute",
+        "name": "Nombre del atributo / campo del avatar (opcional)",
+        "type": "text",
+        "group": "03. Gestión de usuario",
+        "condition": "return model.userMgmtEnabled === true;",
+        "hint": "El widget busca el avatar solo (atributos del usuario, su información adicional o cualquier valor con forma de imagen). Indica el nombre exacto solo si lo conoces. Si no hay avatar, se usa el avatar por defecto de ThingsBoard."
+      },
+      {
+        "id": "userMgmtLogoutText",
+        "name": "Texto del botón de cerrar sesión",
+        "type": "text",
+        "group": "03. Gestión de usuario",
+        "default": "Cerrar sesión",
+        "condition": "return model.userMgmtEnabled === true;"
+      },
+      {
+        "id": "menuIconColor",
+        "name": "Color de los iconos (Estilo 1)",
+        "type": "color",
+        "default": "#C8E4F1",
+        "group": "04. Apariencia y comportamiento",
+        "condition": "return model.uiStyle !== '2';"
+      },
+      {
+        "id": "submenuMode",
+        "name": "Presentación de submenús",
+        "type": "select",
+        "default": "inline",
+        "group": "04. Apariencia y comportamiento",
+        "items": [
+          {
+            "value": "inline",
+            "label": "Desplegable integrado"
+          },
+          {
+            "value": "flyout",
+            "label": "Panel lateral flotante"
+          }
+        ]
+      },
+      {
+        "id": "autoExpandActive",
+        "name": "Abrir el grupo del estado activo (modo integrado)",
+        "type": "switch",
+        "default": true,
+        "group": "04. Apariencia y comportamiento"
+      },
+      {
+        "id": "flyoutWidth",
+        "name": "Ancho panel flotante (px)",
+        "type": "number",
+        "default": 248,
+        "min": 200,
+        "max": 360,
+        "group": "04. Apariencia y comportamiento"
+      },
+      {
+        "id": "flyoutHeight",
+        "name": "Altura máxima panel flotante (px)",
+        "type": "number",
+        "default": 420,
+        "min": 200,
+        "max": 760,
+        "group": "04. Apariencia y comportamiento"
+      },
+      {
+        "id": "menuItems",
+        "name": "Secciones y opciones del menú",
+        "type": "array",
+        "default": [],
+        "group": "05. Estructura del menú",
+        "arrayItemType": "fieldset",
+        "properties": [
+          {
+            "id": "type",
+            "name": "Tipo de elemento",
+            "type": "select",
+            "default": "item",
+            "items": [
+              {
+                "value": "item",
+                "label": "Menú / grupo padre"
+              },
+              {
+                "value": "section",
+                "label": "Encabezado de sección"
+              }
+            ]
+          },
+          {
+            "id": "name",
+            "name": "Nombre / título",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": "icon",
+            "name": "Icono de ThingsBoard (para menú)",
+            "type": "icon",
+            "default": "dashboard",
+            "condition": "return model.type !== 'section';"
+          },
+          {
+            "id": "stateId",
+            "name": "ID del estado del menú padre (opcional)",
+            "type": "text",
+            "condition": "return model.type !== 'section';"
+          },
+          {
+            "id": "activeStates",
+            "name": "ID de estados adicionales que resalten, separado por comas",
+            "type": "text",
+            "condition": "return model.type !== 'section';",
+            "hint": "Opcional. IDs de otros estados del dashboard que también resaltan esta opción, separados por comas. Ej: detalle_equipo, historial"
+          },
+          {
+            "id": "parentAction",
+            "name": "Al pulsar nombre del menú padre",
+            "type": "select",
+            "default": "expand",
+            "items": [
+              {
+                "value": "expand",
+                "label": "Solo expandir / contraer"
+              },
+              {
+                "value": "navigate",
+                "label": "Solo navegar (flecha despliega)"
+              },
+              {
+                "value": "navigateAndExpand",
+                "label": "Navegar y expandir"
+              }
+            ],
+            "condition": "return model.type !== 'section';"
+          },
+          {
+            "id": "subItems",
+            "name": "Submenús",
+            "type": "array",
+            "default": [],
+            "arrayItemType": "fieldset",
+            "properties": [
+              {
+                "id": "name",
+                "name": "Nombre del submenú",
+                "type": "text",
+                "required": true
+              },
+              {
+                "id": "icon",
+                "name": "Icono del submenú",
+                "type": "icon",
+                "default": "chevron_right"
+              },
+              {
+                "id": "stateId",
+                "name": "ID del estado del submenú",
+                "type": "text"
+              },
+              {
+                "id": "activeStates",
+                "name": "ID de estados adicionales que resalten, separado por comas",
+                "type": "text",
+                "hint": "Opcional. IDs de otros estados del dashboard que también resaltan esta opción, separados por comas. Ej: detalle_equipo, historial"
+              }
+            ],
+            "condition": "return model.type !== 'section';"
+          }
+        ]
+      }
+    ],
+    "dataKeySettingsForm": [],
+    "defaultConfig": "{\"datasources\":[],\"showTitle\":false,\"padding\":\"0px\",\"margin\":\"0px\",\"borderRadius\":\"0px\",\"dropShadow\":false,\"widgetStyle\":{\"background\":\"transparent\",\"borderRadius\":\"0px\",\"overflow\":\"hidden\"},\"settings\":{\"brandEnabled\":false,\"logoSize\":42,\"logoRadius\":0,\"userMgmtEnabled\":false,\"userMgmtRoleAttribute\":\"role\",\"userMgmtLogoutText\":\"Cerrar sesión\",\"menuIconColor\":\"#C8E4F1\",\"submenuMode\":\"inline\",\"autoExpandActive\":true,\"flyoutWidth\":248,\"flyoutHeight\":420,\"menuItems\":[],\"uiStyle\":\"1\",\"style2Accent\":\"#F2B705\"},\"title\":\"SMELPRO Sidebar Iconos Nativos v4 (Fix)\"}"
+  },
+  "resources": [],
+  "scada": false,
+  "tags": [
+    "smelpro",
+    "sidebar",
+    "iconos-nativos",
+    "mdi",
+    "states"
+  ]
+}
