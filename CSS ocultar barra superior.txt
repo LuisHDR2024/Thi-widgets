@@ -1,0 +1,80 @@
+/* ===== ESPACIO RESERVADO ===== */
+section.tb-dashboard-container.tb-dashboard-toolbar-opened {
+    margin-top: 0px !important;
+}
+
+/* ===== ALTURA ===== */
+section.tb-dashboard-toolbar,
+section.tb-dashboard-toolbar tb-dashboard-toolbar,
+mat-fab-toolbar.is-fullscreen,
+mat-fab-toolbar.is-fullscreen .mat-fab-toolbar-wrapper,
+mat-fab-toolbar.is-fullscreen .mat-fab-toolbar-content {
+    height: 0px !important;
+    min-height: 0px !important;
+    max-height: 0px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+section.tb-dashboard-toolbar {
+    z-index: 1000 !important;
+}
+
+/* ===== ESTILO GRAFANA ===== */
+mat-fab-toolbar.is-fullscreen mat-toolbar {
+    background: #181b1f !important;
+    color: #d8d9da !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    line-height: 44px !important;
+    margin: 0 !important;
+    padding: 0 16px !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+    border-bottom: 1px solid #2c3235 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+    font-family: Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    text-transform: none !important;
+    letter-spacing: 0.2px !important;
+}
+
+mat-fab-toolbar.is-fullscreen mat-toolbar *,
+mat-fab-toolbar.is-fullscreen mat-toolbar .mat-icon {
+    color: #d8d9da !important;
+    font-size: 13px !important;
+    opacity: 1 !important;
+}
+
+mat-fab-toolbar.is-fullscreen mat-toolbar .mat-icon {
+    width: 18px !important;
+    height: 18px !important;
+    font-size: 18px !important;
+}
+
+mat-fab-toolbar.is-fullscreen mat-toolbar img,
+mat-fab-toolbar.is-fullscreen mat-toolbar svg {
+    max-height: 30px !important;
+    width: auto !important;
+}
+
+/* Botones */
+mat-fab-toolbar.is-fullscreen mat-toolbar button {
+    height: 32px !important;
+    min-height: 32px !important;
+    line-height: 32px !important;
+    padding: 0 10px !important;
+    border-radius: 2px !important;
+    background: transparent !important;
+    transition: background 0.15s ease !important;
+}
+
+mat-fab-toolbar.is-fullscreen mat-toolbar button:hover {
+    background: #22252b !important;
+}
+
+mat-fab-toolbar.is-fullscreen mat-toolbar button:hover *,
+mat-fab-toolbar.is-fullscreen mat-toolbar button:hover .mat-icon {
+    color: #ff7a29 !important;
+}
